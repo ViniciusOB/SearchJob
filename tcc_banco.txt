@@ -1,15 +1,16 @@
-CREATE DATABASE searchjob
+CREATE DATABASE tcc_VCJN
 
 CREATE TABLE IF NOT EXISTS usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nome_usuario VARCHAR(50) NOT NULL,
     sobrenome_usuario VARCHAR(50) NOT NULL,
     email_usuario VARCHAR(100) NOT NULL UNIQUE,
-    apelido VARCHAR(30) NOT NULL UNIQUE,
     senha_usuario VARCHAR(100) NOT NULL,
     tipo ENUM('cliente', 'admin') NOT NULL,
     data_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    profile_pic VARCHAR(255) DEFAULT NULL
+    descricao TEXT,
+    profile_pic VARCHAR(255) DEFAULT NULL,
+    user_hash VARCHAR(64) UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS empresas (
@@ -63,4 +64,57 @@ CREATE TABLE IF NOT EXISTS posts (
     FOREIGN KEY (ID_empresas) REFERENCES empresas(ID_empresas) ON DELETE CASCADE,
     CHECK ((author_type = 'cliente' AND user_id IS NOT NULL AND ID_empresas IS NULL) OR
            (author_type = 'empresa' AND ID_empresas IS NOT NULL AND user_id IS NULL))
+);
+
+CREATE TABLE seguidores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    seguidor_id INT,
+    seguido_id INT,
+    FOREIGN KEY (seguidor_id) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (seguido_id) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE mensagens (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    remetente_id INT,
+    destinatario_id INT,
+    conteudo TEXT,
+    data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (remetente_id) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (destinatario_id) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE IF NOT EXISTS comentarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    conteudo TEXT NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS arquivos_projetos (
+    id_arquivo INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    nome_arquivo VARCHAR(255) NOT NULL,
+    caminho_arquivo VARCHAR(255) NOT NULL,
+    data_upload TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    descricao TEXT,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE IF NOT EXISTS notificacoes (
+    id_notificacao INT AUTO_INCREMENT PRIMARY KEY,
+    tipo ENUM('mensagem', 'seguindo') NOT NULL,
+    usuario_id INT NOT NULL,
+    remetente_id INT,
+    mensagem_id INT,
+    seguidor_id INT,
+    visto BOOLEAN DEFAULT FALSE,
+    data_notificacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (remetente_id) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (mensagem_id) REFERENCES mensagens(id),
+    FOREIGN KEY (seguidor_id) REFERENCES usuarios(id_usuario)
 );

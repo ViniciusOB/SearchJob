@@ -7,15 +7,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $senha_usuario = $_POST['senha'];
 
     try {
-        
+        // Inicializa a variável para identificar a tabela de origem
         $isEmpresa = false;
 
-       
+        // Verifica na tabela de usuarios
         $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email_usuario = :email");
         $stmt->execute(['email' => $email_usuario]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-       
+        // Se não encontrar na tabela de usuarios, verifica na tabela de empresas
         if (!$user) {
             $stmt = $pdo->prepare("SELECT * FROM empresas WHERE email_de_trabalho = :email");
             $stmt->execute(['email' => $email_usuario]);

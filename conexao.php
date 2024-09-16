@@ -1,8 +1,8 @@
 <?php
 $dbHost = 'localhost';
-$dbUsername = 'root';
-$dbPassword = '';
-$dbName = 'searchjob';
+$dbUsername = 'u451416913_2024grupo10';
+$dbPassword = 'Grupo10@123';
+$dbName = 'u451416913_2024grupo10';
 
 try {
     $pdo = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUsername, $dbPassword);
@@ -12,13 +12,12 @@ try {
 }
 
 if(isset($_POST['submit_usuario'])){
-    $stmt = $pdo->prepare("INSERT INTO usuarios (nome_usuario, sobrenome_usuario, email_usuario, apelido, senha_usuario, tipo, data_registro) 
-                           VALUES (:nome_usuario, :sobrenome_usuario, :email_usuario, :apelido, :senha_usuario, :tipo, :data_registro)");
+    $stmt = $pdo->prepare("INSERT INTO usuarios (nome_usuario, sobrenome_usuario, email_usuario, senha_usuario, tipo, data_registro) 
+                           VALUES (:nome_usuario, :sobrenome_usuario, :email_usuario, :senha_usuario, :tipo, :data_registro)");
 
     $nome_usuario = $_POST['nome'];
     $sobrenome_usuario = $_POST['sobrenome'];
     $email_usuario = $_POST['email'];
-    $apelido = $_POST['apelido'];
     $senha_usuario = password_hash($_POST['senha'], PASSWORD_BCRYPT);  // Hash da senha
     $tipo = 'cliente';
     $data_registro = date('Y-m-d H:i:s');
@@ -26,7 +25,6 @@ if(isset($_POST['submit_usuario'])){
     $stmt->bindParam(':nome_usuario', $nome_usuario);
     $stmt->bindParam(':sobrenome_usuario', $sobrenome_usuario);
     $stmt->bindParam(':email_usuario', $email_usuario);
-    $stmt->bindParam(':apelido', $apelido);
     $stmt->bindParam(':senha_usuario', $senha_usuario);
     $stmt->bindParam(':tipo', $tipo);
     $stmt->bindParam(':data_registro', $data_registro);

@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pergunta_id = $_POST['pergunta'];
     $resposta = $_POST['resposta'];
 
-    
+    // Consulta para obter a resposta de segurança do usuário
     $stmt = $pdo->prepare("SELECT rs.resposta
                            FROM respostas_seguranca rs
                            INNER JOIN usuarios u ON rs.usuario_id = u.id_usuario
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $resposta_correta = $stmt->fetchColumn();
 
     if ($resposta_correta === $resposta) {
-       
+        // Se a resposta estiver correta, redirecionar para a página de redefinição de senha
         header("Location: nova_senha.php?email=$email");
         exit();
     } else {

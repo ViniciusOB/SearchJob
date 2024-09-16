@@ -7,11 +7,11 @@ if (!isset($_SESSION['email'])) {
     exit();
 }
 
-
 $servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "searchjob";
+$username = "u451416913_2024grupo10";
+$password = "Grupo10@123";
+$dbname = "u451416913_2024grupo10";
+
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -20,16 +20,17 @@ if ($conn->connect_error) {
     die("Erro na conexão: " . $conn->connect_error);
 }
 
+// Obtendo informações da empresa logada
 $email = $_SESSION['email'];
 $sql = "SELECT * FROM empresas WHERE email_de_trabalho = '$email'";
 $result = $conn->query($sql);
 $empresa = $result->fetch_assoc();
 $id_empresa = $empresa['ID_empresas'];
 
-
+// Verificar se há um termo de pesquisa
 $search_term = isset($_GET['search']) ? $_GET['search'] : '';
 
-
+// Obtendo os projetos da empresa logada com base no termo de pesquisa
 $sql_projetos = "SELECT * FROM projetos WHERE empresa_id = $id_empresa AND nome_projeto LIKE '%" . $conn->real_escape_string($search_term) . "%'";
 $result_projetos = $conn->query($sql_projetos);
 
@@ -43,7 +44,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projetos - Empresa</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="projeto_empresa.css"> 
+    <link rel="stylesheet" href="CSS/projeto_empresa.css"> 
 </head>
 <body>
     <?php include 'views/header_empresa.php'; ?> 

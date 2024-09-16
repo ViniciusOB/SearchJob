@@ -1,0 +1,166 @@
+
+@charset "UTF-8";
+
+
+   
+body {
+    background-image:url(Img/background-Cadatro.png);
+    background-size: cover; 
+    background-repeat:repeat; 
+    background-position: center; 
+    color: #ffffff  ; 
+    font-family: 'Roboto Condensed', sans-serif;
+    overflow: hidden; 
+
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+    
+
+.card {
+    background-color: #263973; 
+    border-color: #3f4e8a; 
+    
+
+}
+
+
+.card-header {
+    background-color: #3f4e8a; 
+    color: #ffffff; 
+}
+
+
+.card-body {
+    color: #ffffff; 
+}
+
+
+.form-control {
+    background-color: #0d245b; 
+    color: #ffffff;
+    border: none; 
+}
+
+
+.btn-primary {
+    background-color: #263973; 
+    border-color: #263973; 
+    border-radius: 10px;
+    padding: 10px 20px; 
+    font-weight: bold; 
+}
+
+    .btn-primary:hover {
+        background-color: #3f4e8a; 
+        border-color: #3f4e8a; 
+    }
+
+
+a {
+    color: #ffffff; 
+    text-decoration: none; 
+}
+
+    a:hover {
+        color: #ffffff; 
+    }
+
+
+
+
+
+
+.navbar {
+    background-color: #000000;
+    box-shadow: 0 2px 5px rgb(13, 178, 255); 
+    color: #fff;
+    padding: 10px 0;
+    position: relative;
+}
+
+.nav-container {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    display: flex;
+    align-items: center; 
+}
+
+    .brand a {
+        background-image: url('Img/searchIcon.png'); 
+        background-repeat: no-repeat;
+        background-size: 30px; 
+        background-position: left center; 
+        padding-left: 30px; 
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+}
+
+    .nav-menu li {
+        margin-left: 20px;
+    }
+
+    .nav-menu a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1em;
+    }
+
+        .nav-menu a:hover {
+            text-decoration: underline;
+        }
+
+        .btn.btn-danger {
+            background-color: #263973;
+            color: #ffffff;
+            border-radius: 5px;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border: none;
+        }
+        
+            .btn.btn-danger:hover {
+                background-color: #3f4e8a;
+                border: none;
+            }
+            .btn.btn-secondary {
+                background-color: #263973;
+                color: #ffffff;
+                border-radius: 5px;
+                padding: 10px 20px;
+                text-decoration: none;
+                font-weight: bold;
+                border: none;
+                
+            }
+            
+                .btn.btn-secondary:hover {
+                    background-color: #3f4e8a;
+                    border: none;
+                }
+            
+    
+    
+

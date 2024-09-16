@@ -18,7 +18,7 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute(['email' => $email_usuario]);
 $empresa = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
+// Verificar se a empresa possui uma imagem de perfil
 $profile_pic = $empresa['profile_pic'] ? 'profile_pics/' . $empresa['profile_pic'] : 'default-profile.png';
 ?>
 
@@ -31,7 +31,7 @@ $profile_pic = $empresa['profile_pic'] ? 'profile_pics/' . $empresa['profile_pic
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
-
+        
         body {
             background-color: #f0f0f0;
         }
@@ -147,7 +147,7 @@ $profile_pic = $empresa['profile_pic'] ? 'profile_pics/' . $empresa['profile_pic
                         <span class="nav-text">Notificações</span>
                     </a>
                 </li>
-                
+           
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img src="<?php echo htmlspecialchars($profile_pic); ?>" alt="Foto" width="50" height="50" class="rounded-circle">
@@ -165,7 +165,7 @@ $profile_pic = $empresa['profile_pic'] ? 'profile_pics/' . $empresa['profile_pic
     </nav>
 
     <div class="card-container">
-       
+    
         <div class="folder">
             <i class="fas fa-folder-open folder-icon"></i>
             <div class="folder-label">Social</div>
@@ -181,13 +181,13 @@ $profile_pic = $empresa['profile_pic'] ? 'profile_pics/' . $empresa['profile_pic
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        
+        // Script para alternar a exibição do dropdown ao clicar na foto
         document.getElementById('profileDropdown').addEventListener('click', function() {
             var dropdownMenu = document.querySelector('.dropdown-menu');
             dropdownMenu.classList.toggle('show');
         });
 
-        
+        // Fechar o dropdown se clicar fora dele
         document.addEventListener('click', function(event) {
             var dropdownMenu = document.querySelector('.dropdown-menu');
             if (!event.target.closest('#profileDropdown')) {

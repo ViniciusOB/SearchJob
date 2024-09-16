@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Novo Usuário</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="registro.css">
+    <link rel="stylesheet" href="CSS/index.css">
 </head>
 <body>
 <nav class="navbar">
@@ -17,7 +17,7 @@
                 <li><a href="home.php">Home</a></li>
                 <li><a href="#">Sobre</a></li>
                 <li><a href="#">Serviços</a></li>
-                <li><a href="#">Contato</a></li>
+                <li><a href="contato.php">Contato</a></li>
                 <li><a href="index.php">Login</a></li>
             </ul>
         </div>
@@ -42,10 +42,6 @@
                             <div class="form-group">
                                 <label for="email">E-mail:</label>
                                 <input type="email" name="email" id="email" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="apelido">Apelido:</label>
-                                <input type="text" name="apelido" id="apelido" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="senha">Senha:</label>

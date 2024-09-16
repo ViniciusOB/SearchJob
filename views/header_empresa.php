@@ -1,6 +1,5 @@
 <?php
 
-// Conectar ao banco de dados e buscar a imagem de perfil da empresa logada
 include 'conexao.php';
 
 $email_usuario = $_SESSION['email'];
@@ -10,7 +9,7 @@ $stmt->execute(['email' => $email_usuario]);
 $empresa = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Verificar se a empresa possui uma imagem de perfil
-$profile_pic = $empresa['profile_pic'] ? 'profile_pics/' . $empresa['profile_pic'] : 'default-profile.png';
+$profile_pic = $empresa['profile_pic'] ? '../profile_pics/' . $empresa['profile_pic'] : 'default-profile.png';
 ?>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />

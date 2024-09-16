@@ -7,20 +7,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $senha_empresa = password_hash($_POST['senha_empresa'], PASSWORD_DEFAULT);
     $telefone_empresa = $_POST['telefone_empresa'];
 
-    
+    // Função para processar o upload de arquivos
     function processarUpload($arquivo, $diretorio_base) {
         $nome_arquivo = '';
         if (isset($_FILES[$arquivo]) && $_FILES[$arquivo]['error'] === UPLOAD_ERR_OK) {
             $nome_original = $_FILES[$arquivo]['name'];
             $extensao = strtolower(pathinfo($nome_original, PATHINFO_EXTENSION));
             
-           
+            // Sanitiza o nome do arquivo
             $nome_original = preg_replace("/[^a-zA-Z0-9.]/", "_", $nome_original);
             $diretorio = __DIR__ . $diretorio_base;
             
-            
+            // Verifica se o diretório existe
             if (!is_dir($diretorio)) {
-                mkdir($diretorio, 0777, true); 
+                mkdir($diretorio, 0777, true); // Cria o diretório se não existir
             }
             
             if (move_uploaded_file($_FILES[$arquivo]['tmp_name'], $diretorio . $nome_original)) {
@@ -36,11 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         return $nome_arquivo;
     }
 
-    
+    // Processar upload do banner da empresa e da foto de perfil
     $banner_empresa = processarUpload('banner_empresa', '/banner_empresa/');
     $profile_pic = processarUpload('profile_pic', '/profile_pics/');
 
-    
+    // Inserir novo registro na tabela de empresas
     if ($banner_empresa && $profile_pic) {
         $stmt = $pdo->prepare("INSERT INTO empresas (nome_empresa, email_de_trabalho, senha_empresa, telefone_empresa, profile_pic, banner_empresa, tipo) 
                                VALUES (:nome_empresa, :email_de_trabalho, :senha_empresa, :telefone_empresa, :profile_pic, :banner_empresa, :tipo)");
@@ -69,19 +69,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Empresa</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="recuperar_senha.css">
+    <link rel="stylesheet" href="CSS/index.css">
 </head>
 <body>
 <nav class="navbar">
     <div class="nav-container">
         <div class="brand">
-            <a href="home.php" style="background-image: url('Img/searchIcon.png');">JOB</a>
+            <a href="../todos/home.php" style="background-image: url('Img/searchIcon.png');">JOB</a>
         </div>
         <ul class="nav-menu">
-            <li><a href="home.php">Home</a></li>
+            <li><a href="../todos/home.php">Home</a></li>
             <li><a href="#">Sobre</a></li>
             <li><a href="#">Serviços</a></li>
-            <li><a href="#">Contato</a></li>
+            <li><a href="../todos/contato.php">Contato</a></li>
             <li><a href="index.php">Login</a></li>
         </ul>
     </div>

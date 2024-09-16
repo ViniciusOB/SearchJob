@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Rede Social</title>
+    <title>SearchJob</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
 </head>
@@ -16,9 +16,10 @@
             <?php if (isset($_SESSION['user_id'])): ?>
                 <li class="nav-item"><a class="nav-link" href="profile.php">Perfil</a></li>
                 <li class="nav-item"><a class="nav-link" href="feed.php">Feed</a></li>
-                <li class="nav-item"><a class="nav-link" href="projeto_usuario.php">Projetos</a></li>
                 <li class="nav-item"><a class="nav-link" href="vagas.php">Vagas</a></li>
-                <li class="nav-item"><a class="nav-link" href="notificacoes.php">Mensagens</a></li>
+                <li class="nav-item"><a class="nav-link" href="mensagens.php">Mensagens</a></li>
+                <li class="nav-item"><a class="nav-link" href="notificacoes.php">Notificações</a></li>
+                <li class="nav-item"><a class="nav-link" href="contato.php">Contato</a></li>
                 <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
             <?php else: ?>
                 <li class="nav-item"><a class="nav-link" href="registro.php">Registrar</a></li>

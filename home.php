@@ -3,83 +3,70 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-   
-    <link rel="stylesheet" href="index.css">
-
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            document.querySelector('.text-modelo').addEventListener('click', function() {
-                window.location.href = 'registro.php';
-            });
-        });
-    </script>
+    <title id="rickeocara">Home</title>
+    <link rel="stylesheet" href="CSS/home_css.css">
 </head>
-
-
 <body>
-    <nav class="navbar">
+<nav class="navbar">
         <div class="nav-container">
             <div class="brand">
                 <a href="home.php" style="background-image: url('Img/searchIcon.png');">JOB</a>
             </div>
             <ul class="nav-menu">
-                <li><a href="home.php">Home</a></li>
-                <li><a href="#">Contato</a></li>
-                <li><a href="index.php">Login</a></li>
+                <li><a href="home.php" class="nav-link">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">Cadastrar-se</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="cadastro_empresa.php" class="dropdown-item">Corporativo</a></li>
+                        <li><a href="registro.php" class="dropdown-item">Pessoal</a></li>
+                    </ul>
+                </li>
+                <li><a href="index.php" class="nav-link">Login</a></li>
             </ul>
         </div>
     </nav>
 
-    <video autoplay muted loop class="video-bg">
-        <source src="Img/background.mp4" type="video/mp4">
-        Seu navegador não suporta a tag de vídeo.
-    </video>
-
-
-    <div class="boaVinda">
-        <h1>SEJA BEM-VINDO</h1>
-    </div>
-    <div class="Texto-Boavinda">
-        Nosso objetivo é ajudar profissionais iniciantes na área de TI a conseguirem seu primeiro emprego...
+    <div class="gradient-section">
+        <div class="boaVinda">
+            <h1>Code your future, shape the world!</h1>
+        </div>
+        <div class="Texto-Boavinda">
+            Nosso objetivo é ajudar profissionais iniciantes na área de TI a conseguirem seu primeiro emprego...
+        </div>
     </div>
 
-    <div href ="registro.php"  class="text-modelo">
-        <p id="texto"></p>
+<div class="backgroundpt2"></div>
+
+
+<div class ="container_body">
+    <div class="container-img">
+<img src="Img/trabalho3.png" alt="Imagem 3" class="image-slow">
     </div>
+</div>
 
-    <script type="text/javascript" charset="utf-8">
-        const textos = [
-            "Acabou de se formar?...................",
-            "Quer oportunidade de arranjar seu primeiro emprego?...................",
-            "Então venha fazer parte do SEARCHJOB!!!"
-        ];
+<div class="project-card">
+  <h2>Comunidade</h2>
+  <p>Mostre seus projetos e interaja com a nossa sociedade</p>
+  <p class="texto-project-card">Converse com outros usuários para compartilhar seus projetos, trocar ideias e aprender novas técnicas. Aproveite a oportunidade para colaborar, receber feedback construtivo e expandir seus conhecimentos, enquanto explora soluções criativas e inovações com a comunidade.</p>
+</div>
 
-        const elementoTexto = document.getElementById('texto');
-        let i = 0;
-        let j = 0;
-        let textoAtual = textos[i];
+    <script>
+        // Script para alternar a exibição do dropdown ao clicar
+        document.querySelector('.dropdown-toggle').addEventListener('click', function(event) {
+            event.preventDefault();
+            this.parentElement.classList.toggle('show');
+        });
 
-        function exibirTexto() {
-            elementoTexto.textContent = textoAtual.substring(0, j);
-            j++;
-            if (j > textoAtual.length) {
-                j = 0;
-                i++;
-                if (i >= textos.length) {
-                    i = 0;
-                }
-                textoAtual = textos[i];
-                setTimeout(exibirTexto, 1000);
-            } else {
-                setTimeout(exibirTexto, 100);
+        // Fechar o dropdown se clicar fora dele
+        document.addEventListener('click', function(event) {
+            var dropdown = document.querySelector('.dropdown');
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('show');
             }
-        }
+        });
 
-        exibirTexto();
+    
     </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ 
 </body>
 </html>

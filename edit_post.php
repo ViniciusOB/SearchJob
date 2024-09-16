@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id']) || !isset($_POST['post_id'])) {
 $post_id = $_POST['post_id'];
 $user_id = $_SESSION['user_id'];
 
-
+// Verifique se o post pertence ao usuário logado
 $stmt = $pdo->prepare('SELECT * FROM posts WHERE id = :post_id AND (user_id = :user_id OR ID_empresas IN (SELECT ID_empresas FROM empresas WHERE user_id = :user_id))');
 $stmt->execute(['post_id' => $post_id, 'user_id' => $user_id]);
 $post = $stmt->fetch();
