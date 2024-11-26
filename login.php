@@ -1,9 +1,11 @@
 <?php
 session_start();
 require_once 'conexao.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email_usuario = $_POST['email'];
     $senha_usuario = $_POST['senha'];
+
     try {
         $isEmpresa = false;
         $isFuncionario = false;
@@ -30,13 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($user) {
-            if ($isEmpresa) {
-                $hashedPassword = $user['senha_empresa'];
-            } elseif ($isFuncionario) {
-                $hashedPassword = $user['senha_funcionario'];
-            } else {
-                $hashedPassword = $user['senha_usuario'];
-            }
+            // Verifica a senha com base na tabela de origem
+            $hashedPassword = $isEmpresa ? $user['senha_empresa'] : ($isFuncionario ? $user['senha_funcionario'] : $user['senha_usuario']);
 
             if (password_verify($senha_usuario, $hashedPassword) || $senha_usuario === $hashedPassword) {
                 // Define a sessão e o redirecionamento com base na tabela de origem
@@ -62,17 +59,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } elseif ($user['tipo'] === 'funcionario') {
                     header("Location: feed.php");
                 } else {
-                    echo "Tipo de usuário desconhecido.";
+                    header("Location: home.php?erro=3"); // Caso o tipo de usuário seja desconhecido
                 }
                 exit();
             } else {
-                echo "Senha incorreta.";
+                header("Location: home.php?erro=2"); // Senha incorreta
+                exit();
             }
         } else {
-            echo "Usuário não encontrado.";
+            header("Location: home.php?erro=1"); // Usuário não encontrado
+            exit();
         }
     } catch (PDOException $e) {
-        echo "Erro ao acessar o banco de dados: " . $e->getMessage();
+        header("Location: home.php?erro=3"); // Erro de banco de dados ou erro desconhecido
+        exit();
     }
 }
 ?>

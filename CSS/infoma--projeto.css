@@ -1,0 +1,169 @@
+/* Reset de margens e preenchimento padrão */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Cor de fundo do corpo */
+body {
+    background-color: #e0e0e0 !important; /* Cor suave para o fundo */
+    font-family: 'Arial', sans-serif; /* Fonte padrão */
+    backdrop-filter: blur(5px); /* Efeito de desfoque no fundo */
+}
+
+/* Estilo do contêiner do projeto */
+.project-container {
+    max-width: 800px; /* Largura máxima */
+    margin: 30px auto; /* Centraliza o contêiner */
+    background-color: #ffffff; /* Cor de fundo do projeto */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    overflow: hidden; /* Esconde o conteúdo que ultrapassa as bordas */
+}
+
+/* Estilo da imagem do projeto */
+.project-image {
+    width: 50%; /* A imagem ocupará 50% da largura do contêiner */
+    height: auto; /* Mantém a proporção da imagem */
+    display: block; /* Garante que seja um elemento de bloco */
+    margin: 30px auto 0; /* Centraliza a imagem */
+    border-radius: 20px; /* Deixa os cantos arredondados */
+}
+
+
+/* Estilo das informações do projeto */
+.project-info {
+    padding: 20px; /* Preenchimento interno */
+}
+
+.project-info h2 {
+    font-size: 2.5em; /* Tamanho da fonte */
+    text-align: center;
+    margin-bottom: 15px; /* Espaçamento inferior */
+    color: #333333; /* Cor do texto */
+}
+h4 {
+    font-size: 2.5em; /* Tamanho da fonte */
+    text-align: center;
+    margin-bottom: 30px !important; /* Espaçamento inferior */
+    color: #333333; /* Cor do texto */
+}
+.project-info p {
+    margin-bottom: 10px; /* Espaçamento inferior */
+    line-height: 1.6; /* Aumenta o espaçamento entre linhas */
+}
+
+/* Estilo do botão de aprovação */
+.btn-approve {
+    display: block; /* Faz o botão ocupar toda a largura */
+    width: 100%; /* Largura total */
+    margin: 20px auto; /* Margem superior e inferior */
+    padding: 10px; /* Preenchimento do botão */
+    font-weight: bold; /* Texto em negrito */
+    border-radius: 5px; /* Bordas arredondadas */
+    transition: background-color 0.3s ease; /* Transição suave na cor do fundo */
+    background-color: #007bff; /* Cor padrão do botão */
+    color: white; /* Cor do texto */
+    text-align: center; /* Alinha o texto centralizado */
+}
+
+.btn-approve:hover {
+    background-color: #28a745; /* Cor mais escura no hover */
+}
+
+/* Estilo do contêiner de inscritos */
+.inscritos-container {
+    margin-top: 30px; /* Margem superior */
+}
+
+/* Estilo dos cartões de inscritos */
+.inscrito-card {
+    display: flex; /* Flexbox para alinhar imagem e informações */
+    align-items: center; /* Centraliza verticalmente */
+    background-color: #f1f1f1; /* Fundo do cartão */
+    border-radius: 5px; /* Bordas arredondadas */
+    padding: 15px; /* Preenchimento do cartão */
+    margin-bottom: 15px; /* Margem inferior */
+    margin-left: 30px; /* Margem inferior */
+    margin-right: 30px; /* Margem inferior */
+}
+
+.inscrito-card img {
+    width: 50px; /* Largura da imagem de perfil */
+    height: 50px; /* Altura da imagem de perfil */
+    border-radius: 50%; /* Imagem redonda */
+    margin-right: 15px; /* Espaçamento à direita */
+}
+
+.inscrito-info {
+    line-height: 1.4; /* Aumenta o espaçamento entre linhas */
+}
+
+/* Estilo do card */
+.card {
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Cabeçalho do card */
+.card-header {
+    background-color: #007bff; /* Cor de fundo do cabeçalho */
+    color: white; /* Cor do texto */
+    font-weight: bold; /* Texto em negrito */
+    text-align: center; /* Centralizar o texto */
+    padding: 15px; /* Preenchimento do cabeçalho */
+    border-top-left-radius: 10px; /* Bordas arredondadas */
+    border-top-right-radius: 10px; /* Bordas arredondadas */
+}
+
+/* Estilo do corpo do card */
+.card-body {
+    padding: 30px; /* Preenchimento do corpo */
+}
+
+/* Estilo dos rótulos */
+label {
+    font-weight: bold; /* Rótulos em negrito */
+    margin-bottom: 10px; /* Espaçamento inferior */
+}
+
+/* Estilo dos inputs e selects */
+.form-control {
+    border-radius: 5px; /* Bordas arredondadas */
+    border: 1px solid #ced4da; /* Borda suave */
+    transition: border-color 0.3s ease; /* Transição suave na cor da borda */
+}
+
+.form-control:focus {
+    border-color: #007bff; /* Cor da borda em foco */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Sombra suave ao focar */
+}
+
+/* Estilo do botão de envio */
+.btn-primary {
+    background-color: #007bff; /* Cor do botão */
+    border: none; /* Remover borda */
+    border-radius: 5px; /* Bordas arredondadas */
+    padding: 10px 20px; /* Preenchimento do botão */
+    font-weight: bold; /* Texto em negrito */
+    transition: background-color 0.3s ease; /* Transição suave na cor do fundo */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Cor mais escura no hover */
+}
+
+/* Estilo para o botão de voltar */
+.btn-secondary {
+    margin-left: 10px; /* Espaçamento à esquerda */
+    border-radius: 5px; /* Bordas arredondadas */
+}
+
+/* Estilo da imagem de capa */
+.img-fluid {
+    border-radius: 5px; /* Bordas arredondadas para a imagem */
+    margin-top: 15px; /* Espaçamento superior */
+    max-height: 300px; /* Limite de altura da imagem */
+    object-fit: cover; /* Manter a proporção da imagem */
+}

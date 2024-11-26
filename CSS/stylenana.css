@@ -1,0 +1,355 @@
+/* CSS Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo da Página */
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
+    background-color: #141432;
+    overflow-x: hidden;
+    transition: background-color 0.3s;
+}
+
+.main-container {
+    width: 100%;
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between; /* Logo à esquerda, menu central, busca à direita */
+    align-items: center;
+    padding: 15px;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+}
+
+.navbar.scrolled {
+    background-color: #1c1c3c;
+}
+
+.navbar .logo {
+    width: 50px;
+}
+
+/* Centraliza os links de navegação */
+.nav-menu {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    margin-left: 150px; /* Ajuste de acordo com a posição desejada */
+}
+
+.nav-menu li {
+    position: relative;
+    transition: transform 0.3s;
+}
+
+.nav-menu li:hover {
+    transform: scale(1.05);
+}
+
+.nav-menu a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.nav-menu a:hover {
+    color: #007bff;
+}
+
+/* Barra de Busca Estilizada */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #1c1c3c;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.search-bar input[type="text"] {
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    background-color: #2c2c54;
+    color: #fff;
+    outline: none;
+    transition: background-color 0.3s ease;
+    width: 200px;
+}
+
+.search-bar input[type="text"]::placeholder {
+    color: #aaa;
+}
+
+.search-bar button {
+    padding: 10px 16px;
+    font-size: 14px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-bar button:hover {
+    background-color: #0056b3;
+}
+
+/* Seção Inicial */
+.hero {
+    height: 100vh;
+    background-image: url('Img/slideshow1.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 80px;
+}
+
+.hero h1 {
+    font-size: 48px;
+    line-height: 1.2;
+    color: #fff;
+    margin-bottom: 20px;
+    animation: fadeInUp 1s ease;
+}
+
+.hero p {
+    font-size: 24px;
+    color: #00d4ff;
+    animation: fadeInUp 1.5s ease;
+}
+
+/* Blocos de Informação */
+.info-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 60px 20px;
+}
+
+.info-box {
+    width: 350px;
+    background-color: #2c2c54;
+    border-radius: 8px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
+    color: #fff;
+}
+
+.info-box:hover {
+    transform: translateY(-10px);
+}
+
+.info-box h3 {
+    font-size: 22px;
+    color: #00d4ff;
+    margin-bottom: 15px;
+}
+
+.info-box p {
+    font-size: 16px;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+/* Footer */
+footer {
+    background-color: #1c1c3c;
+    padding: 20px;
+    text-align: center;
+}
+
+footer p {
+    color: #fff;
+}
+
+/* Modal de Cadastro */
+.modal {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    transition: opacity 0.5s ease;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background-color: #1f1f3a;
+    color: #e0e0e0;
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    margin-left: 750px;
+    margin-top: 150px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #fff;
+}
+
+/* Estilo das abas (Corporativo e Pessoal) */
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    background-color: #2a2a47;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #b0b0d0;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 20px;
+    margin: 0 10px;
+}
+
+.tab-button.active {
+    background-color: #505073;
+    color: #ffffff;
+}
+
+.tab-button:hover {
+    background-color: #60608a;
+    color: #ffffff;
+}
+
+/* Estilo dos formulários */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    color: #b0b0d0;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #505073;
+    border-radius: 8px;
+    background-color: #2a2a47;
+    color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #70708d;
+}
+
+.btn-primary {
+    background-color: #505073;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #60608a;
+}
+
+/* Animações */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .nav-menu {
+        margin-left: 20px; /* Ajuste menor para telas médias */
+    }
+
+    .search-bar input[type="text"] {
+        width: 150px; /* Reduz o tamanho da barra de pesquisa em telas menores */
+    }
+
+    .modal-content {
+        max-width: 90%; /* Ajusta a largura da modal em telas menores */
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-menu {
+        margin-left: 0; /* Remove a margem para dispositivos móveis */
+    }
+
+    .search-bar input[type="text"] {
+        width: 120px; /* Reduz ainda mais a barra de pesquisa em telas pequenas */
+    }
+
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .info-box {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .modal-content {
+        padding: 15px; /* Reduz o padding na modal em telas pequenas */
+    }
+}

@@ -40,7 +40,7 @@ try {
         $caminho_arquivo = $projeto['caminho_arquivo'];
 
         if (isset($_FILES['project_file']) && $_FILES['project_file']['error'] == UPLOAD_ERR_OK) {
-            $upload_dir = '../project_files/';
+            $upload_dir = 'project_files/';
             if (!is_dir($upload_dir)) {
                 mkdir($upload_dir, 0777, true);
             }

@@ -1,47 +1,30 @@
 <?php
-session_start(); 
-require 'conexao.php'; 
+session_start();
+include 'conexao.php';
 include 'views/header.php';
 
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-
 if (!isset($_SESSION['user_id'])) {
-    die('Usuário não está logado.'); 
+    header('Location: login.php');
+    exit();
 }
 
-$user_id = $_SESSION['user_id']; 
+$user_id = $_SESSION['user_id'];
 
 // Consulta para buscar as notificações
 $sql = "SELECT n.*, 
-               CONCAT(u.nome_usuario, ' ', u.sobrenome_usuario) AS remetente_nome, 
-               CONCAT(s.nome_usuario, ' ', s.sobrenome_usuario) AS seguidor_nome, 
+               u.nome_usuario AS remetente_nome, 
+               s.nome_usuario AS seguidor_nome, 
                m.conteudo AS mensagem_conteudo
         FROM notificacoes n
         LEFT JOIN usuarios u ON n.remetente_id = u.id_usuario
         LEFT JOIN usuarios s ON n.seguidor_id = s.id_usuario
         LEFT JOIN mensagens m ON n.mensagem_id = m.id
-        WHERE n.usuario_id = ?
+        WHERE n.usuario_id = :usuario_id
         ORDER BY n.data_notificacao DESC";
 
 $stmt = $pdo->prepare($sql);
-
-if (!$stmt) {
-    die("Erro na preparação da consulta: " . implode(":", $pdo->errorInfo())); // Debug para erros de preparação
-}
-
-$stmt->bindParam(1, $user_id, PDO::PARAM_INT); // O ID do usuário logado é dinâmico
-
-try {
-    $stmt->execute();
-    $notificacoes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Erro ao executar a consulta: " . $e->getMessage()); // Debug para erros de execução
-}
-
+$stmt->execute(['usuario_id' => $user_id]);
+$notificacoes = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -49,50 +32,10 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="Img/SearchJob.png">
     <title>Notificações</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            text-align: center;
-            margin-top: 20px;
-            color: #333;
-        }
-        .container {
-            width: 60%;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .notificacao {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-        }
-        .notificacao.novo {
-            background-color: #eaf4fc;
-        }
-        .notificacao p {
-            margin: 0;
-            color: #555;
-        }
-        .notificacao small {
-            display: block;
-            margin-top: 8px;
-            color: #999;
-        }
-        p.nenhuma-notificacao {
-            text-align: center;
-            font-size: 18px;
-            color: #777;
-        }
-    </style>
+    <link rel="stylesheet" href="CSS/notificacoes.css">
+    
 </head>
 <body>
 
@@ -125,11 +68,10 @@ try {
 // Marca todas as notificações como vistas após a visualização
 $sql_update = "UPDATE notificacoes SET visto = 1 WHERE usuario_id = ?";
 $stmt_update = $pdo->prepare($sql_update);
-$stmt_update->bindParam(1, $user_id, PDO::PARAM_INT); // O ID do usuário logado é dinâmico
 
 try {
-    $stmt_update->execute();
+    $stmt_update->execute([$user_id]);
 } catch (PDOException $e) {
-    die("Erro ao marcar notificações como vistas: " . $e->getMessage()); // Debug para erros de atualização
+    die("Erro ao marcar notificações como vistas: " . $e->getMessage());
 }
 ?>

@@ -1,12 +1,19 @@
 <?php
 session_start();
 
+// Verificar se o funcionário está logado
+if (!isset($_SESSION['id_funcionario'])) {
+    header('Location: login.php');
+    exit();
+}
+
+// Conexão com o banco de dados MySQL
 $servername = "localhost"; 
-$username = "root"; 
-$password = ""; 
-$dbname = ""; 
+$username = "u451416913_2024grupo10"; 
+$password = "Grupo10@123"; 
+$dbname = "u451416913_2024grupo10"; 
 
-
+// Criando a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Verificando a conexão
@@ -14,12 +21,14 @@ if ($conn->connect_error) {
     die("Erro na conexão: " . $conn->connect_error);
 }
 
-// Obtendo informações da empresa logada
-$email = $_SESSION['email'];
-$sql = "SELECT * FROM empresas WHERE email_de_trabalho = '$email'";
+// Obtendo o ID do funcionário logado e sua empresa associada
+$id_funcionario = $_SESSION['id_funcionario'];
+
+// Busca o ID da empresa do funcionário
+$sql = "SELECT empresa_id FROM funcionarios WHERE id_funcionario = $id_funcionario";
 $result = $conn->query($sql);
-$empresa = $result->fetch_assoc();
-$id_empresa = $empresa['ID_empresas'];
+$funcionario = $result->fetch_assoc();
+$id_empresa = $funcionario['empresa_id'];  // Empresa associada ao funcionário
 
 // Verifica se o formulário de cadastro foi submetido
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cadastrar'])) {
@@ -27,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cadastrar'])) {
     $nome = $_POST['nome'];
     $descricao = $_POST['descricao'];
     $nivel_especialidade = $_POST['nivel_especialidade'];
+    $max_inscricoes = $_POST['max_inscricoes'];  // Número máximo de inscrições
 
     // Processamento do upload da imagem de capa
     $imagem_capa = '';
@@ -34,13 +44,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cadastrar'])) {
         $nome_original = $_FILES['imagem_capa']['name'];
         $extensao = strtolower(pathinfo($nome_original, PATHINFO_EXTENSION));
 
-        
+        // Sanitize o nome do arquivo
         $nome_original = preg_replace("/[^a-zA-Z0-9.]/", "_", $nome_original);
         $diretorio = __DIR__ . '/capa_projeto/';
         
-        // Verifica se o diretório existe
+        // Verifica se o diretório existe, se não, cria-o
         if (!is_dir($diretorio)) {
-            mkdir($diretorio, 0777, true); // Cria o diretório se não existir
+            mkdir($diretorio, 0777, true);
         }
 
         // Move o arquivo para o diretório 'capa_projeto'
@@ -54,8 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['cadastrar'])) {
     }
 
     // Preparando a consulta SQL para inserir os dados na tabela do banco de dados
-    $sql = "INSERT INTO projetos (nome_projeto, descricao, nivel_especialidade, imagem_capa, empresa_id) 
-            VALUES ('$nome', '$descricao', '$nivel_especialidade', '$imagem_capa', '$id_empresa')";
+    $sql = "INSERT INTO projetos (nome_projeto, descricao, nivel_especialidade, imagem_capa, max_inscricoes, empresa_id, id_funcionario) 
+            VALUES ('$nome', '$descricao', '$nivel_especialidade', '$imagem_capa', '$max_inscricoes', '$id_empresa', '$id_funcionario')";
 
     // Executando a consulta SQL
     if ($conn->query($sql) === TRUE) {
@@ -102,6 +112,10 @@ $conn->close();
                                     <option value="Intermediário">Intermediário</option>
                                     <option value="Avançado">Avançado</option>
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="max_inscricoes">Máximo de Inscrições:</label>
+                                <input type="number" name="max_inscricoes" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="imagem_capa">Capa do projeto:</label>

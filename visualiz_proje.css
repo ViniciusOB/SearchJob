@@ -1,0 +1,156 @@
+/* Estilos Gerais */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f3f4f6;
+    margin: 0;
+    padding: 0;
+    color: #4b5563;
+    display: flex; /* Definindo o body como um flex container para alinhar header e conteúdo */
+}
+
+.content {
+    padding: 40px;
+    background-color: #f9fafb;
+    min-height: 100vh;
+    width: 100%; /* Ocupa a largura total disponível */
+    margin-left: 250px; /* Espaçamento igual à largura do header */
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 30px;
+}
+
+/* Estilo das abas (tabs) */
+.tabs {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.tab {
+    padding: 12px 25px;
+    background-color: #f3f4f6;
+    border-radius: 9999px;
+    color: #1f2937;
+    font-weight: 500;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-right: 10px;
+}
+
+.tab.active {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.tab:hover {
+    background-color: #2563eb;
+    color: white;
+}
+
+/* Conteúdo de cada aba */
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+/* Layout dos projetos com grid */
+.projects-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colunas */
+    gap: 20px;
+    margin-top: 30px;
+    align-items: start; /* Alinha os cartões no topo */
+    width: 100%; /* Garante que o container ocupe toda a largura disponível */
+    max-width: 1200px; /* Defina um limite máximo para evitar esticar demais */
+}
+
+/* Estilos dos cartões de projetos */
+.project-card {
+    min-width: 250px; /* Defina uma largura mínima */
+    max-width: 300px; /* Defina um limite para o cartão */
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 380px; /* Define uma altura mínima consistente para os cartões */
+}
+
+.project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.project-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image {
+    transform: scale(1.05);
+}
+
+.project-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 10px;
+}
+
+.project-date {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-bottom: 15px;
+}
+
+.project-card .status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #10b981;
+    color: white;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border-radius: 9999px;
+    font-weight: 600;
+}
+
+/* Animação suave ao carregar */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.project-card {
+    animation: fadeIn 0.4s ease;
+}
+

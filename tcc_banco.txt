@@ -1,5 +1,3 @@
-CREATE DATABASE tcc_VCJN
-
 CREATE TABLE IF NOT EXISTS usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nome_usuario VARCHAR(50) NOT NULL,
@@ -7,10 +5,9 @@ CREATE TABLE IF NOT EXISTS usuarios (
     email_usuario VARCHAR(100) NOT NULL UNIQUE,
     senha_usuario VARCHAR(100) NOT NULL,
     tipo ENUM('cliente', 'admin') NOT NULL,
-    data_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_registro TIMESTAMP DEFAULT CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '-03:00'),
     descricao TEXT,
-    profile_pic VARCHAR(255) DEFAULT NULL,
-    user_hash VARCHAR(64) UNIQUE
+    profile_pic VARCHAR(255) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS empresas (
@@ -24,18 +21,38 @@ CREATE TABLE IF NOT EXISTS empresas (
     profile_pic VARCHAR(255) DEFAULT NULL
 );
 
-CREATE TABLE IF NOT EXISTS projetos (
+CREATE TABLE funcionarios (
+    id_funcionario INT AUTO_INCREMENT PRIMARY KEY,
+    nome_funcionario VARCHAR(100) NOT NULL,
+    sobrenome_funcionario VARCHAR(100) NOT NULL,
+    email_funcionario VARCHAR(100) NOT NULL,
+    senha_funcionario VARCHAR(255) NOT NULL,
+    tipo ENUM('admin', 'funcionario') DEFAULT 'funcionario',
+    data_registro TIMESTAMP DEFAULT CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '-03:00'),
+    profile_pic VARCHAR(255) DEFAULT 'default-profile.png',
+    empresa_id INT NOT NULL,
+    FOREIGN KEY (empresa_id) REFERENCES empresas(ID_empresas)
+);
+
+CREATE TABLE projetos (
     id_projeto INT AUTO_INCREMENT PRIMARY KEY,
     nome_projeto VARCHAR(100) NOT NULL,
     descricao TEXT NOT NULL,
     nivel_especialidade ENUM('Baixo', 'Intermediário', 'Avançado') NOT NULL,
     imagem_capa VARCHAR(255) NOT NULL,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    empresa_id INT,
-    FOREIGN KEY (empresa_id) REFERENCES empresas(ID_empresas)
+    data_criacao TIMESTAMP DEFAULT CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '-03:00'),
+    empresa_id INT DEFAULT NULL,
+    id_funcionario INT DEFAULT NULL,
+    max_inscricoes INT NOT NULL,
+    status_aprovacao ENUM('pendente', 'aprovado') DEFAULT 'pendente',
+    FOREIGN KEY (empresa_id) REFERENCES empresas(ID_empresas),
+    FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id_funcionario)
 );
 
-CREATE TABLE IF NOT EXISTS perguntas_seguranca ( id_pergunta INT AUTO_INCREMENT PRIMARY KEY, pergunta VARCHAR(255) NOT NULL );
+CREATE TABLE IF NOT EXISTS perguntas_seguranca (
+    id_pergunta INT AUTO_INCREMENT PRIMARY KEY,
+    pergunta VARCHAR(255) NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS respostas_seguranca (
     id_respostas INT AUTO_INCREMENT PRIMARY KEY,
@@ -51,57 +68,77 @@ INSERT INTO perguntas_seguranca (pergunta) VALUES
 ('Qual é a sua cidade natal?'),
 ('Qual é o nome do seu melhor amigo?');
 
-CREATE TABLE IF NOT EXISTS posts (
+CREATE TABLE posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    author_type ENUM('cliente', 'empresa') NOT NULL,
+    author_type ENUM('cliente', 'empresa', 'funcionario') NOT NULL,
     user_id INT DEFAULT NULL, 
     ID_empresas INT DEFAULT NULL, 
+    funcionario_id INT DEFAULT NULL,
     content TEXT NOT NULL,
     image_path VARCHAR(255) DEFAULT NULL,
     youtube_link VARCHAR(255) DEFAULT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '-03:00'),
     FOREIGN KEY (user_id) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
     FOREIGN KEY (ID_empresas) REFERENCES empresas(ID_empresas) ON DELETE CASCADE,
-    CHECK ((author_type = 'cliente' AND user_id IS NOT NULL AND ID_empresas IS NULL) OR
-           (author_type = 'empresa' AND ID_empresas IS NOT NULL AND user_id IS NULL))
+    FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id_funcionario) ON DELETE CASCADE,
+    CHECK ((author_type = 'cliente' AND user_id IS NOT NULL AND ID_empresas IS NULL AND funcionario_id IS NULL) OR
+           (author_type = 'empresa' AND ID_empresas IS NOT NULL AND user_id IS NULL AND funcionario_id IS NULL) OR
+           (author_type = 'funcionario' AND funcionario_id IS NOT NULL AND ID_empresas IS NULL AND user_id IS NULL))
 );
 
 CREATE TABLE seguidores (
     id INT AUTO_INCREMENT PRIMARY KEY,
     seguidor_id INT,
     seguido_id INT,
+    seguidor_funcionario_id INT DEFAULT NULL,
+    seguido_funcionario_id INT DEFAULT NULL,
     FOREIGN KEY (seguidor_id) REFERENCES usuarios(id_usuario),
-    FOREIGN KEY (seguido_id) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (seguido_id) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (seguidor_funcionario_id) REFERENCES funcionarios(id_funcionario) ON DELETE CASCADE,
+    FOREIGN KEY (seguido_funcionario_id) REFERENCES funcionarios(id_funcionario) ON DELETE CASCADE
 );
 
 CREATE TABLE mensagens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     remetente_id INT,
     destinatario_id INT,
+    remetente_funcionario_id INT DEFAULT NULL,
+    destinatario_funcionario_id INT DEFAULT NULL,
     conteudo TEXT,
-    data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_envio TIMESTAMP DEFAULT CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '-03:00'),
     FOREIGN KEY (remetente_id) REFERENCES usuarios(id_usuario),
-    FOREIGN KEY (destinatario_id) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (destinatario_id) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (remetente_funcionario_id) REFERENCES funcionarios(id_funcionario),
+    FOREIGN KEY (destinatario_funcionario_id) REFERENCES funcionarios(id_funcionario)
 );
 
 CREATE TABLE IF NOT EXISTS comentarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     post_id INT NOT NULL,
-    usuario_id INT NOT NULL,
+    usuario_id INT DEFAULT NULL,
+    funcionario_id INT DEFAULT NULL, 
     conteudo TEXT NOT NULL,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    criado_em TIMESTAMP DEFAULT CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '-03:00'),
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id_usuario) ON DELETE CASCADE
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id_funcionario) ON DELETE CASCADE,
+    CHECK (
+        (usuario_id IS NOT NULL AND funcionario_id IS NULL) OR 
+        (usuario_id IS NULL AND funcionario_id IS NOT NULL)
+    )
 );
+
 
 CREATE TABLE IF NOT EXISTS arquivos_projetos (
     id_arquivo INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
+    funcionario_id INT DEFAULT NULL,
     nome_arquivo VARCHAR(255) NOT NULL,
     caminho_arquivo VARCHAR(255) NOT NULL,
-    data_upload TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_upload TIMESTAMP DEFAULT CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '-03:00'),
     descricao TEXT,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id_funcionario)
 );
 
 CREATE TABLE IF NOT EXISTS notificacoes (
@@ -111,10 +148,44 @@ CREATE TABLE IF NOT EXISTS notificacoes (
     remetente_id INT,
     mensagem_id INT,
     seguidor_id INT,
+    funcionario_usuario_id INT DEFAULT NULL,
+    remetente_funcionario_id INT DEFAULT NULL,
+    seguidor_funcionario_id INT DEFAULT NULL,
     visto BOOLEAN DEFAULT FALSE,
-    data_notificacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    data_notificacao TIMESTAMP DEFAULT CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '-03:00'),
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (remetente_id) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (mensagem_id) REFERENCES mensagens(id),
-    FOREIGN KEY (seguidor_id) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (seguidor_id) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (funcionario_usuario_id) REFERENCES funcionarios(id_funcionario),
+    FOREIGN KEY (remetente_funcionario_id) REFERENCES funcionarios(id_funcionario),
+    FOREIGN KEY (seguidor_funcionario_id) REFERENCES funcionarios(id_funcionario)
+);
+
+CREATE TABLE inscricoes (	
+    id_usuario int not null,
+    id_projeto int not null,
+    PRIMARY KEY(id_usuario, id_projeto),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_projeto) REFERENCES projetos(id_projeto)
+);
+
+CREATE TABLE relatorios (
+    id_relatorio INT AUTO_INCREMENT PRIMARY KEY,
+    id_funcionario INT NOT NULL,
+    id_projeto INT NOT NULL,
+    assunto VARCHAR(255) NOT NULL,
+    descricao TEXT NOT NULL,
+    arquivo VARCHAR(255) DEFAULT NULL,
+    link VARCHAR(255) DEFAULT NULL,
+    data_envio TIMESTAMP DEFAULT CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '-03:00'),
+    FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id_funcionario),
+    FOREIGN KEY (id_projeto) REFERENCES projetos(id_projeto)
+);
+
+CREATE TABLE IF NOT EXISTS visitas_empresa (
+    id_visita INT AUTO_INCREMENT PRIMARY KEY,
+    id_empresa INT NOT NULL,
+    data_visita TIMESTAMP DEFAULT CONVERT_TZ(CURRENT_TIMESTAMP, '+00:00', '-03:00'),
+    FOREIGN KEY (id_empresa) REFERENCES empresas(ID_empresas)
 );

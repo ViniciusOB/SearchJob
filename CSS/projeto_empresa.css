@@ -1,38 +1,15 @@
 
 body {
     background-color: #e0e0e0; 
-    background-image: url('../imgs_tcc/Black.jpg'); 
+    background-image: url('../Img/bg_projeto_empresa.png'); 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
+    backdrop-filter: blur(5px);
 }
 
-.navbar {
-    background-color: #343a40; 
-}
-
-.navbar .logo-space {
-    width: 50px;
-    height: 50px;
-    background-color: #ddd;
-}
-
-.navbar .title {
-    flex-grow: 1;
-    text-align: center;
-    margin: 0;
-}
-
-.navbar .profile {
-    display: flex;
-    align-items: center;
-}
-
-.navbar .profile .btn {
-    margin-left: 10px;
-}
 
 .profile-icon {
     width: 40px;

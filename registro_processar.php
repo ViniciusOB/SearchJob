@@ -2,7 +2,7 @@
 require_once 'conexao.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-   
+
     $nome = $_POST['nome'];
     $sobrenome = $_POST['sobrenome'];
     $email = $_POST['email'];
@@ -25,29 +25,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $profile_pic = $profile_pic_path; // Atualiza o caminho da imagem de perfil
         }
     }
-   
-    // Insere os dados do usuário na tabela 'usuarios'
-    $stmt = $pdo->prepare("INSERT INTO usuarios (nome_usuario, sobrenome_usuario, email_usuario, senha_usuario, profile_pic, tipo) VALUES (:nome, :sobrenome, :email, :senha, :profile_pic, :tipo)");
-    $stmt->execute([
-        'nome' => $nome, 
-        'sobrenome' => $sobrenome, 
-        'email' => $email, 
-        'senha' => $senha, 
-        'profile_pic' => $profile_pic, 
-        'tipo' => $tipo
-    ]);
-    $usuario_id = $pdo->lastInsertId();
-    
-    // Insere a resposta de segurança na tabela 'respostas_seguranca'
-    $stmt = $pdo->prepare("INSERT INTO respostas_seguranca (usuario_id, pergunta_id, resposta) VALUES (:usuario_id, :pergunta_id, :resposta)");
-    $stmt->execute([
-        'usuario_id' => $usuario_id, 
-        'pergunta_id' => $pergunta_id, 
-        'resposta' => $resposta
-    ]);
 
-    // Redireciona para a página inicial após o cadastro
-    header("Location: index.php");
-    exit();
+    // Verifica se o email já está cadastrado nas tabelas de usuários, empresas ou funcionários
+    $stmt = $pdo->prepare("
+        SELECT COUNT(*) FROM usuarios WHERE email_usuario = :email
+        UNION ALL
+        SELECT COUNT(*) FROM empresas WHERE email_de_trabalho = :email
+        UNION ALL
+        SELECT COUNT(*) FROM funcionarios WHERE email_funcionario = :email
+    ");
+    $stmt->execute(['email' => $email]);
+    $emailExists = array_sum($stmt->fetchAll(PDO::FETCH_COLUMN));
+
+    if ($emailExists > 0) {
+    echo "<script>alert('O email já está em uso. Por favor, use outro email.');</script>";
+  }else {
+        // Insere os dados do usuário na tabela 'usuarios'
+        $stmt = $pdo->prepare("INSERT INTO usuarios (nome_usuario, sobrenome_usuario, email_usuario, senha_usuario, profile_pic, tipo) VALUES (:nome, :sobrenome, :email, :senha, :profile_pic, :tipo)");
+        $stmt->execute([
+            'nome' => $nome, 
+            'sobrenome' => $sobrenome, 
+            'email' => $email, 
+            'senha' => $senha, 
+            'profile_pic' => $profile_pic, 
+            'tipo' => $tipo
+        ]);
+        $usuario_id = $pdo->lastInsertId();
+        
+        // Insere a resposta de segurança na tabela 'respostas_seguranca'
+        $stmt = $pdo->prepare("INSERT INTO respostas_seguranca (usuario_id, pergunta_id, resposta) VALUES (:usuario_id, :pergunta_id, :resposta)");
+        $stmt->execute([
+            'usuario_id' => $usuario_id, 
+            'pergunta_id' => $pergunta_id, 
+            'resposta' => $resposta
+        ]);
+
+        // Redireciona para a página inicial após o cadastro
+        header("Location: home.php");
+        exit();
+    }
 }
 ?>

@@ -1,0 +1,103 @@
+.tabs {
+    display: flex;
+    margin-bottom: 15px;
+    background-color: #2f3e46; /* Cor mais suave e moderna */
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #6c757d; /* Cinza elegante */
+}
+
+.tab {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    cursor: pointer;
+    background-color: #495057;
+    color: #f8f9fa;
+    border: 2px solid transparent; /* Removendo o contraste de bordas */
+    border-radius: 5px;
+    margin: 0 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tab.active {
+    background-color: #6c757d; /* Cinza suave para abas ativas */
+    color: #f8f9fa;
+    transform: scale(1.08); /* Aumento mais sutil */
+    box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3); /* Adicionando leve sombra */
+}
+
+.tab:hover {
+    background-color: #868e96; /* Cinza mais claro no hover */
+}
+
+.content-section {
+    display: none;
+    padding: 20px;
+    background-color: #495057;
+    color: #f8f9fa;
+    border: 2px solid #6c757d;
+    border-radius: 8px;
+}
+
+.content-section.active {
+    display: block;
+}
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+
+.add-project-card {
+    background-color: #6c757d;
+    color: #2f3e46;
+    text-align: center;
+    font-size: 24px;
+    padding: 60px 20px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.add-project-card:hover {
+    background-color: #868e96;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(108, 117, 125, 0.3); /* Sombra suave no hover */
+}
+
+.project-card {
+    background-color: #f8f9fa;
+    color: #343a40;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Sombra mais sutil */
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.project-card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+}
+
+.project-card:hover {
+    transform: translateY(-8px); /* Redução da translação */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra mais elegante no hover */
+}
+
+.project-name {
+    font-weight: bold;
+    padding: 12px 0;
+    background-color: rgba(47, 62, 70, 0.8);
+    color: #ffd369; /* Amarelo suave e elegante */
+    font-size: 1.2em;
+}
+
+h1, h2, h3, .important-text {
+    color: #ffd369; /* Amarelo mais suave para títulos e textos importantes */
+}

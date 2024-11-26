@@ -1,257 +1,286 @@
-/* Reset básico */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', sans-serif;
 }
 
-body, html {
-  height: 100%;
-  overflow: auto;
-  margin: 0;
-  font-family: 'Mona Sans', 'Mona Sans Header Fallback', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-  color: #ffffff; /* Branco */
-  background: linear-gradient(140deg, #003366 0%, #0066cc 50%, #00cc99 75%);
-  position: relative;
-  z-index: 1;
+body {
+    background: rgb(26, 24, 51);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
 }
 
-/* Estilos para a barra de navegação */
 .navbar {
-  background-color: black;
-  box-shadow: 0 2px 5px rgb(255, 255, 255); 
-  color: #fff;
-  padding: 5px 0;
-  position: relative;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    z-index: 1000;
+    display: block;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: start;
 }
 
 .nav-container {
-  width: 90%;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.brand {
-  display: flex;
-  align-items: center; /* Centraliza verticalmente */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .brand a {
-  background-image: url('Img/searchIcon.png'); /* Caminho atualizado para o ícone */
-  background-repeat: no-repeat;
-  background-size: 30px; /* Ajuste o tamanho da imagem conforme necessário */
-  background-position: left center; /* Posiciona a imagem à esquerda */
-  padding-left: 30px; /* Adiciona espaço à esquerda da palavra "JOB" */
-  color: #fff;
-  text-decoration: none;
-  font-size: 1.2em;
-  font-weight: bold;
+    text-decoration: none;
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    padding: 0 10px;
+    background-repeat: no-repeat;
+    background-size: 30px; 
+    background-position: left center;
+    padding-left: 40px; 
 }
 
 .nav-menu {
-  list-style: none;
-  display: flex;
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
 }
 
-.nav-menu li {
-  margin-left: 20px;
+.nav-link {
+    text-decoration: none;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: transparent;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-.nav-menu a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 1em;
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: rgb(0 212 255);
 }
 
-.nav-menu a:hover {
-  text-decoration: underline;
+.dropdown {
+    position: relative;
 }
 
 .dropdown-menu {
-  display: none;
-  position: absolute;
-  background-color: #000000;
-  padding: 10px;
-  list-style: none;
-  margin: 0;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgb(255, 255, 255);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: none;
+    list-style: none;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .dropdown.show .dropdown-menu {
-  display: block;
+    display: block;
 }
 
 .dropdown-item {
-  color: white;
-  text-decoration: none;
-  display: block;
-  padding: 5px 10px;
+    text-decoration: none;
+    color: white;
+    padding: 5px 10px;
+    display: block;
 }
 
 .dropdown-item:hover {
-  background-color: #444;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgb(0 212 255);
 }
 
-/* Gradiente de fundo da página */
-.gradient-section {
-  height: 75vh; /* 75% da altura da tela */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+.container {
+    width: 100%; /* O container ocupa toda a largura da tela */
+    display: flex;
+    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    align-items: center; /* Centraliza o conteúdo verticalmente */
+    min-height: 100vh; /* Garante que o card fique centralizado verticalmente */
 }
 
-
-/* Estilos para o cartão */
-.card {
-  background-color: #263973; /* Azul escuro */
-  border-color: #3f4e8a; /* Azul escuro */
+.form-group {
+    margin-bottom: 15px;
+    width: 100%; /* Ajusta a largura do formulário */
 }
 
-.card-header {
-  background-color: #3f4e8a; /* Azul escuro */
-  color: #ffffff; /* Branco */
-}
-
-.card-body {
-  color: #ffffff; /* Branco */
-}
-
-/* Estilos para os campos de formulário */
 .form-control {
-  background-color: #0d245b; /* Azul escuro */
-  color: #ffffff; /* Branco */
-  border: none; /* Removi a borda para um visual mais limpo */
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #D1D1D4;
+    background: none;
+    color: rgb(0 212 255);
+    font-weight: bold;
+    transition: border-color 0.3s ease;
 }
 
-/* Estilos para os botões */
-.btn-voltar:hover, .btn-primary:hover, .btn.btn-danger:hover, .btn.btn-secondary:hover {
-  background-color: #0d245b;
+.form-control:focus {
+    border-bottom-color: #6A679E;
+    outline: none;
 }
 
-.btn.btn-secondary {
-  background-color: #3f4e8a;
-  padding: 10px 20px;
-  text-decoration: none;
-  font-weight: bold;
+.btn {
+    background-color: #fff;
+    color: #4C489D;
+    border: none;
+    padding: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%;
+    transition: background-color 0.3s ease;
 }
 
-.btn-primary {
-  background-color: #263973; /* Azul escuro */
-  border-color: #263973; /* Azul escuro */
-  border-radius: 10px;
-  padding: 10px 20px; /* Adiciona espaçamento interno para melhor legibilidade */
-  font-weight: bold; /* Deixa o texto em negrito */
+.btn:hover {
+    background-color: #D4D3E8;
 }
 
-/* Estilos para links */
-a {
-  color: #ffffff; /* Branco */
-  text-decoration: none; /* Remove o sublinhado dos links */
+.mt-3 a, .mt-4 a {
+    color: rgb(0 212 255);
+    text-decoration: none;
+    margin-right: 10px;
 }
 
-a:hover {
-  color: #ffffff; /* Branco */
+.mt-3 a:hover, .mt-4 a:hover {
+    text-decoration: underline;
 }
 
-/* Media Queries */
-@media (max-width: 600px) {
-  .nav-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.btn img {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    vertical-align: middle;
+}
 
-  .brand {
-    font-size: 1.5em;
-  }
-
-  .nav-menu {
-    flex-direction: column;
+.btn-danger, .btn-primary ,.btn-secondary{
+    padding: 12px 20px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
     width: 100%;
     margin-top: 10px;
-  }
-
-  .nav-menu li {
-    margin: 10px 0;
-  }
-
-  .project-card {
-    margin-left: 0;
-    width: 90%;
-    margin-top: 20%;
-  }
-
-  .project-card h2 {
-    font-size: 40px !important;
-  }
-
-  .project-card .texto-project-card {
-    width: 100%;
-    font-size: 16px !important;
-  }
-
-  .image-slow {
-    width: 100%;
-    margin-left: 0 !important;
-  }
 }
 
-@media (min-width: 601px) and (max-width: 1024px) {
-  .nav-container {
-    flex-direction: row;
-  }
-
-  .nav-menu {
-    flex-direction: row;
-  }
-
-  .project-card {
-    margin-left: 10%;
-    width: 80%;
-  }
-
-  .project-card h2 {
-    font-size: 60px !important;
-  }
-
-  .project-card .texto-project-card {
-    width: 70%;
-  }
-
-  .image-slow {
-    width: 50%;
-    margin-left: 0 !important;
-  }
+.card {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    width: 40vw; /* Defina a largura do card */
+    max-width: 500px; /* Limita a largura do card */
+    margin: 0 auto; /* Garante que o card fique centralizado horizontalmente */
+    text-align: center; /* Centraliza o conteúdo do card */
+    margin-left: -110px;
+    margin-right: -20;
+}
+.card-header{
+    color: rgb(0 212 255) !important;
+}
+label{
+    color: rgb(0 212 255) !important;
 }
 
-@media (min-width: 1025px) {
-  .nav-container {
-    width: 80%;
-  }
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
 
-  .nav-menu {
-    flex-direction: row;
-  }
+.card h3 {
+    color: rgb(0 212 255);
+}
 
-  .project-card {
-    margin-left: 50%;
-    width: 30%;
-  }
+.card p {
+    color: rgb(0 212 255);
+}
 
-  .project-card h2 {
-    font-size: 80px !important;
-  }
+.btn-danger:hover, .btn-primary:hover, .btn-secondary:hover{
+    opacity: 0.9;
+}
 
-  .project-card .texto-project-card {
-    width: 40pc;
-  }
+.btn-primary-login {
+    padding: 12px 20px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    width: 100%;
+}
 
-  .image-slow {
-    width: 26%;
-    margin-left: 120px !important;
-  }
+.btn-primary-login:hover {
+    opacity: 0.9;
+}
+
+@media (min-width: 1500px) {
+    .container {
+        margin-left: 24%;
+        margin-right: 35%;
+    }
+}
+
+/* Ajustes para telas menores */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .brand {
+        font-size: 1.5em;
+    }
+    
+    .nav-menu {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+        align-items: center;
+    }
+    
+    .nav-menu li {
+        margin: 10px 0;
+    }
+
+    .container {
+        flex-direction: column;
+        padding-bottom: 0; /* Remove o padding negativo */
+    }
+
+    .card {
+        width: 80vw; /* Ajusta a largura do card para telas menores */
+        height: auto;
+    }
+
+    .form-group {
+        margin-bottom: 10px; /* Diminui a margem entre os campos */
+        width: 60%; /* Aumenta a largura do formulário, se necessário */
+    }
+    
+    .form-control {
+        padding: 8px; /* Diminui o padding dos campos */
+    }
+    
+    .btn {
+        padding: 10px; /* Diminui o padding dos botões */
+        font-size: 14px; /* Ajusta o tamanho da fonte */
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 90vw; /* Ocupa quase a tela inteira em dispositivos muito pequenos */
+    }
 }

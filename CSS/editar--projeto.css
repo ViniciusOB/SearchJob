@@ -1,0 +1,84 @@
+/* Reset de margens e preenchimento padrão */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Cor de fundo do corpo */
+body {
+    background-color: #f8f9fa; /* Cor suave para o fundo */
+    font-family: 'Arial', sans-serif; /* Fonte padrão */
+    background-color: #e0e0e0; 
+    backdrop-filter: blur(5px);
+}
+
+/* Estilo do card */
+.card {
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Cabeçalho do card */
+.card-header {
+    background-color: #007bff; /* Cor de fundo do cabeçalho */
+    color: white; /* Cor do texto */
+    font-weight: bold; /* Texto em negrito */
+    text-align: center; /* Centralizar o texto */
+    padding: 15px; /* Preenchimento do cabeçalho */
+    border-top-left-radius: 10px; /* Bordas arredondadas */
+    border-top-right-radius: 10px; /* Bordas arredondadas */
+}
+
+/* Estilo do corpo do card */
+.card-body {
+    padding: 30px; /* Preenchimento do corpo */
+}
+
+/* Estilo dos rótulos */
+label {
+    font-weight: bold; /* Rótulos em negrito */
+    margin-bottom: 10px; /* Espaçamento inferior */
+}
+
+/* Estilo dos inputs e selects */
+.form-control {
+    border-radius: 5px; /* Bordas arredondadas */
+    border: 1px solid #ced4da; /* Borda suave */
+    transition: border-color 0.3s; /* Transição suave na cor da borda */
+}
+
+/* Estilo para foco nos inputs */
+.form-control:focus {
+    border-color: #007bff; /* Cor da borda em foco */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Sombra suave ao focar */
+}
+
+/* Estilo do botão de envio */
+.btn-primary {
+    background-color: #007bff; /* Cor do botão */
+    border: none; /* Remover borda */
+    border-radius: 5px; /* Bordas arredondadas */
+    padding: 10px 20px; /* Preenchimento do botão */
+    font-weight: bold; /* Texto em negrito */
+    transition: background-color 0.3s; /* Transição suave na cor do fundo */
+}
+
+/* Estilo para o hover do botão de envio */
+.btn-primary:hover {
+    background-color: #0056b3; /* Cor mais escura no hover */
+}
+
+/* Estilo para o botão de voltar */
+.btn-secondary {
+    margin-left: 10px; /* Espaçamento à esquerda */
+    border-radius: 5px; /* Bordas arredondadas */
+}
+
+/* Estilo da imagem de capa */
+.img-fluid {
+    border-radius: 5px; /* Bordas arredondadas para a imagem */
+    margin-top: 15px; /* Espaçamento superior */
+    max-height: 300px; /* Limite de altura da imagem */
+    object-fit: cover; /* Manter a proporção da imagem */
+}

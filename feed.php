@@ -3,261 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Início</title>
-    <link rel="stylesheet" href="CSS/feed.css">
+    <title>SearchJob</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="icon" type="image/x-icon" href="Img/SearchJob.png">
 </head>
-<body>
-<?php
-session_start();
-include 'conexao.php';
-include 'views/header.php';
+<body class="bg-gray-100 text-gray-800">
+    <?php
+    session_start();
+    include 'conexao.php';
+    include 'views/header.php';
 
-// Verifica se o usuário está logado
-if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit();
-}
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 
-$stmt = $pdo->prepare('SELECT nome_usuario, profile_pic, descricao FROM usuarios WHERE id_usuario = :id_usuario');
-$stmt->execute(['id_usuario' => $_SESSION['user_id']]);
-$user = $stmt->fetch();
-?>
+    // Verifica se o usuário está logado
+    if (!isset($_SESSION['user_id']) && !isset($_SESSION['id_funcionario'])) {
+        header('Location: login.php');
+        exit();
+    }
 
-<div class="tabs">
-    <div class="tab active" onclick="showContent('feed')">Para você</div>
-    <div class="tab" onclick="showContent('seguindo')">Seguindo</div>
-</div>
+    // Identifica o tipo de usuário e carrega informações do banco de dados
+    if (isset($_SESSION['user_id'])) {
+        $userType = 'cliente';
+        $userId = $_SESSION['user_id'];
+        $stmt = $pdo->prepare('SELECT nome_usuario AS nome, profile_pic, descricao FROM usuarios WHERE id_usuario = :id_usuario');
+        $stmt->execute(['id_usuario' => $userId]);
+    } else {
+        $userType = 'funcionario';
+        $userId = $_SESSION['id_funcionario'];
+        $stmt = $pdo->prepare('SELECT CONCAT(nome_funcionario, " ", sobrenome_funcionario) AS nome, profile_pic FROM funcionarios WHERE id_funcionario = :id_funcionario');
+        $stmt->execute(['id_funcionario' => $userId]);
+    }
 
-<div class="post-form">
-    <form id="postForm" action="post_status.php" method="POST" enctype="multipart/form-data">
-        <div class="d-flex align-items-start">
-            <img src="<?php echo htmlspecialchars($user['profile_pic'] ?: 'default-profile.png'); ?>" alt="Foto de perfil" style="width: 40px; height: 40px;" onclick="viewProfile(<?php echo $_SESSION['user_id']; ?>)">
-            <textarea name="status" placeholder="O que está acontecendo?" rows="3" class="form-control ml-3"></textarea>
+    $user = $stmt->fetch();
+    ?>
+
+    <!-- Navbar Tabs -->
+    <div class="bg-white shadow-md p-4 flex justify-center md:justify-start flex-wrap space-x-4 md:space-x-6 overflow-x-auto">
+        <button class="tab font-semibold text-blue-600 hover:bg-blue-100 px-4 py-2 rounded transition" onclick="showContent('feed')">Para Você</button>
+        <?php if ($userType === 'cliente'): ?>
+            <button class="tab font-semibold text-gray-600 hover:bg-blue-100 px-4 py-2 rounded transition" onclick="showContent('seguindo')">Seguindo</button>
+        <?php endif; ?>
+    </div>
+
+    <div class="flex flex-col md:flex-row max-w-6xl mx-auto mt-8 gap-6 px-4">
+        <!-- Sidebar: Following List -->
+        <div class="bg-gray-800 text-white p-4 rounded-lg shadow-md w-full md:w-64 mb-6 md:mb-0 overflow-y-auto max-h-screen">
+            <h3 class="text-lg font-semibold mb-4">Seguindo</h3>
+            <?php
+            if ($userType === 'cliente') {
+                $stmt = $pdo->prepare('
+                    SELECT id_usuario, nome_usuario, profile_pic
+                    FROM usuarios
+                    JOIN seguidores ON usuarios.id_usuario = seguidores.seguido_id
+                    WHERE seguidores.seguidor_id = :user_id
+                ');
+                $stmt->execute(['user_id' => $userId]);
+                while ($following = $stmt->fetch()) {
+                    echo '
+                    <div class="flex items-center mb-4" onmouseover="showUserDetails(' . $following['id_usuario'] . ')" 
+                         onmouseout="hideUserDetails(' . $following['id_usuario'] . ')">
+                        <img src="' . htmlspecialchars($following['profile_pic'] ?: 'default-profile.png') . '" alt="Seguido" class="w-10 h-10 rounded-full mr-3 cursor-pointer">
+                        <span>' . htmlspecialchars($following['nome_usuario']) . '</span>
+                        <div class="user-details-popup hidden absolute bg-gray-700 p-4 rounded-lg shadow-lg z-10" id="user-details-' . $following['id_usuario'] . '">
+                            <div class="flex items-center">
+                                <img src="' . htmlspecialchars($following['profile_pic'] ?: 'default-profile.png') . '" alt="Foto de perfil" class="w-8 h-8 rounded-full mr-2">
+                                <p class="font-semibold">' . htmlspecialchars($following['nome_usuario']) . '</p>
+                            </div>
+                            <form action="mensagens.php" method="get" class="mt-3">
+                                <input type="hidden" name="user_id" value="' . $following['id_usuario'] . '">
+                                <input type="text" name="message" placeholder="Digite uma mensagem..." required class="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white">
+                                <button type="submit" class="bg-blue-500 text-white px-4 py-1 mt-2 rounded hover:bg-blue-600">Enviar</button>
+                            </form>
+                        </div>
+                    </div>';
+                }
+            }
+            ?>
         </div>
-        <div class="d-flex justify-content-between align-items-center mt-3">
-            <div class="post-icons">
-                <label for="image-upload" class="icon">&#128247;</label>
-                <input type="file" id="image-upload" name="image" accept="image/*" style="display:none;">
+
+        <!-- Main Content -->
+        <div class="flex-1 space-y-6">
+            <!-- Post Form -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <form id="postForm" action="post_status.php" method="POST" enctype="multipart/form-data" class="space-y-4">
+                    <div class="flex items-start space-x-4">
+                        <img src="<?php echo htmlspecialchars($user['profile_pic'] ?: 'default-profile.png'); ?>" alt="Foto de perfil" class="w-10 h-10 rounded-full cursor-pointer" onclick="viewProfile(<?php echo $userId; ?>)">
+                        <textarea name="status" placeholder="O que está acontecendo?" rows="3" class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+                    </div>
+                    <input type="hidden" name="author_type" value="<?php echo $userType; ?>">
+                    <div class="flex justify-between items-center">
+                        <label for="image-upload" class="text-blue-500 cursor-pointer">&#128247;</label>
+                        <input type="file" id="image-upload" name="image" accept="image/*" class="hidden">
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Postar</button>
+                    </div>
+                </form>
             </div>
-            <button type="submit" class="btn btn-primary">Postar</button>
+
+            <!-- Feed Content (Para Você) -->
+            <div id="feed" class="space-y-4">
+                <?php
+                // Exibir todos os posts no feed "Para Você"
+                $stmt = $pdo->prepare('
+                    SELECT posts.*, 
+                        CASE 
+                            WHEN posts.author_type = "cliente" THEN usuarios.nome_usuario
+                            WHEN posts.author_type = "funcionario" THEN CONCAT(funcionarios.nome_funcionario, " ", funcionarios.sobrenome_funcionario)
+                        END AS nome_autor, 
+                        CASE 
+                            WHEN posts.author_type = "cliente" THEN usuarios.profile_pic
+                            WHEN posts.author_type = "funcionario" THEN funcionarios.profile_pic
+                        END AS profile_pic
+                    FROM posts
+                    LEFT JOIN usuarios ON posts.user_id = usuarios.id_usuario
+                    LEFT JOIN funcionarios ON posts.funcionario_id = funcionarios.id_funcionario
+                    ORDER BY posts.created_at DESC
+                ');
+                $stmt->execute();
+                
+                while ($row = $stmt->fetch()) {
+                    include 'post_template.php';
+                }
+                ?>
+            </div>
+
+            <!-- Following Content (Seguindo) -->
+            <div id="seguindo" class="hidden space-y-4">
+                <?php if ($userType === 'cliente'): ?>
+                    <?php
+                    // Exibe apenas posts dos usuários que o cliente está seguindo
+                    $stmt = $pdo->prepare('
+                        SELECT posts.*, 
+                               CASE 
+                                   WHEN posts.author_type = "cliente" THEN usuarios.nome_usuario
+                                   WHEN posts.author_type = "funcionario" THEN CONCAT(funcionarios.nome_funcionario, " ", funcionarios.sobrenome_funcionario)
+                               END AS nome_autor, 
+                               CASE 
+                                   WHEN posts.author_type = "cliente" THEN usuarios.profile_pic
+                                   WHEN posts.author_type = "funcionario" THEN funcionarios.profile_pic
+                               END AS profile_pic
+                        FROM posts 
+                        LEFT JOIN usuarios ON posts.user_id = usuarios.id_usuario 
+                        LEFT JOIN funcionarios ON posts.funcionario_id = funcionarios.id_funcionario 
+                        JOIN seguidores ON usuarios.id_usuario = seguidores.seguido_id 
+                        WHERE seguidores.seguidor_id = :user_id
+                        ORDER BY posts.created_at DESC
+                    ');
+                    $stmt->execute(['user_id' => $userId]);
+
+                    while ($row = $stmt->fetch()) {
+                        include 'post_template.php';
+                    }
+                    ?>
+                <?php endif; ?>
+            </div>
         </div>
-    </form>
-</div>
+    </div>
 
-<div id="feed" class="content active">
-    <?php
-    // Seleciona posts do feed geral, excluindo os seguidos
-    $stmt = $pdo->prepare('
-        SELECT posts.*, usuarios.nome_usuario, usuarios.profile_pic 
-        FROM posts 
-        JOIN usuarios ON posts.user_id = usuarios.id_usuario 
-        LEFT JOIN seguidores ON usuarios.id_usuario = seguidores.seguido_id AND seguidores.seguidor_id = :user_id
-        WHERE seguidores.seguido_id IS NULL
-        ORDER BY posts.created_at DESC
-    ');
-    $stmt->execute(['user_id' => $_SESSION['user_id']]);
-
-    while ($row = $stmt->fetch()) {
-        include 'post_template.php';
-    }
-
-    // Seleciona projetos para exibição no feed
-    $stmt = $pdo->query('
-        SELECT projetos.id_projeto, projetos.empresa_id, empresas.ID_empresas, empresas.nome_empresa, empresas.profile_pic, projetos.nome_projeto, projetos.descricao, projetos.imagem_capa, projetos.nivel_especialidade, projetos.data_criacao
-        FROM projetos 
-        JOIN empresas ON projetos.empresa_id = empresas.ID_empresas 
-        ORDER BY projetos.data_criacao DESC
-    ');
-
-    while ($row = $stmt->fetch()) {
-        echo "<div class='card mb-3'>";
-        echo "<div class='card-body'>";
-        echo "<div class='media'>";
-        $profile_pic_url = htmlspecialchars($row['profile_pic']) ?: 'default-profile.png';
-        echo "<img src='profile_pics/" . $profile_pic_url . "' class='mr-3 rounded-circle' alt='Profile Picture' style='width: 50px; height: 50px;' onclick=\"viewProfile(" . htmlspecialchars($row['empresa_id']) . ")\">";
-        echo "<div class='media-body'>";
-        echo "<h5 class='mt-0'>" . htmlspecialchars($row['nome_empresa']) . "</h5>";
-        echo "<h4 class='mt-2'>" . htmlspecialchars($row['nome_projeto']) . "</h4>";
-        if ($row['imagem_capa']) {
-            echo "<img src='capa_projeto/" . htmlspecialchars($row['imagem_capa']) . "' class='img-fluid rounded mb-3' alt='Capa do Projeto'>";
-        }
-        echo "<p class='nivel_especialidade'> Nível de especialidade: " . htmlspecialchars($row['nivel_especialidade']) . "</p>";
-        echo "<p>" . htmlspecialchars($row['descricao']) . "</p>";
-        echo "<p class='text-muted'><small>" . htmlspecialchars($row['data_criacao']) . "</small></p>";
-        echo "</div>"; // Fecha media-body
-        echo "</div>"; // Fecha media
-        echo "</div>"; // Fecha card-body
-        echo "</div>"; // Fecha card
-    }
-    ?>
-</div>
-
-<div id="seguindo" class="content">
-    <?php
-    // Seleciona posts dos usuários seguidos
-    $stmt = $pdo->prepare('
-        SELECT posts.*, usuarios.nome_usuario, usuarios.profile_pic 
-        FROM posts 
-        JOIN usuarios ON posts.user_id = usuarios.id_usuario 
-        JOIN seguidores ON usuarios.id_usuario = seguidores.seguido_id 
-        WHERE seguidores.seguidor_id = :user_id
-        ORDER BY posts.created_at DESC
-    ');
-    $stmt->execute(['user_id' => $_SESSION['user_id']]);
-
-    while ($row = $stmt->fetch()) {
-        include 'post_template.php';
-    }
-    ?>
-</div>
-
-<script>
-    function showContent(id) {
-        document.querySelectorAll('.content').forEach(content => content.classList.remove('active'));
-        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        document.querySelector(`.tab[onclick="showContent('${id}')"]`).classList.add('active');
-    }
-
-    function viewProfile(userId) {
-        window.location.href = `profile.php?id=${userId}`;
-    }
-
-    function openChat(contactId) {
-        document.getElementById('chat-window').style.display = 'block';
-        document.getElementById('destinatario_id').value = contactId;
-        document.getElementById('chat-contact-name').textContent = contactId;
-        document.getElementById('chat-profile-pic').src = document.querySelector(`.contact[data-id="${contactId}"] .contact-pic`).src;
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        function postComment(postId) {
-            const form = document.querySelector(`#post-${postId} .comment-form`);
-            const comment = form.querySelector('textarea').value;
-
-            fetch('post_comment.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams({
-                    post_id: postId,
-                    comment: comment
-                })
-            })
-            .then(response => response.text())
-            .then(() => {
-                loadComments(postId);
-                form.reset();
-            })
-            .catch(error => console.error('Erro:', error));
-
-            return false; // Previne o envio do formulário padrão
+    <script>
+        function showContent(id) {
+            document.querySelectorAll('.space-y-4').forEach(content => content.classList.add('hidden'));
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('text-blue-600', 'bg-blue-200'));
+            document.getElementById(id).classList.remove('hidden');
+            document.querySelector('.tab[onclick="showContent(\'' + id + '\')"]').classList.add('text-blue-600', 'bg-blue-200');
         }
 
-        function loadComments(postId) {
-            fetch(`load_comments.php?post_id=${postId}`)
-            .then(response => response.text())
-            .then(data => {
-                document.querySelector(`#comments-${postId}`).innerHTML = data;
-            })
-            .catch(error => console.error('Erro:', error));
+        function viewProfile(userId) {
+            window.location.href = 'profile.php?user_id=' + userId;
         }
 
-        function toggleComments(postId) {
-            const commentsSection = document.querySelector(`#comments-${postId}`);
-            if (commentsSection.style.display === 'none' || commentsSection.style.display === '') {
-                loadComments(postId);
-                commentsSection.style.display = 'block';
-            } else {
-                commentsSection.style.display = 'none';
-            }
+        function showUserDetails(userId) {
+            document.getElementById('user-details-' + userId).classList.remove('hidden');
         }
 
-        // Adiciona eventos de envio para todos os formulários de comentário na página
-        document.querySelectorAll('.comment-form').forEach(form => {
-            form.addEventListener('submit', function(event) {
-                event.preventDefault(); // Previne o envio do formulário padrão
-                const postId = this.dataset.postId; // Obtém o ID do post do atributo data-post-id
-                postComment(postId);
-            });
-        });
-
-        // Adiciona eventos de clique para os botões de mostrar/esconder comentários
-        document.querySelectorAll('.toggle-comments').forEach(button => {
-            button.addEventListener('click', function() {
-                const postId = this.dataset.postId; // Obtém o ID do post do atributo data-post-id
-                toggleComments(postId);
-            });
-        });
-
-        // Trata o envio do formulário principal
-        document.getElementById('postForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Previne o envio do formulário padrão
-    const formData = new FormData(this);
-
-    fetch('post_status.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.text())
-    .then(data => {
-        // Atualiza o feed com a nova postagem
-        const feed = document.getElementById('feed');
-        feed.insertAdjacentHTML('afterbegin', data); // Adiciona o novo post no início do feed
-        this.reset(); // Limpa o formulário
-
-        // Atualiza o perfil do usuário dinamicamente
-        const profilePic = document.querySelector('.post-form img'); // Seleciona a imagem de perfil no form
-        fetch('get_profile_info.php') // Supondo que "post_status.php" já lida com perfis
-        .then(response => response.json()) // Recebe o perfil como JSON
-        .then(profileData => {
-            // Atualiza a imagem de perfil se necessário
-            if (profileData.profile_pic) {
-                profilePic.src = profileData.profile_pic;
-            }
-        })
-        .catch(error => console.error('Erro ao atualizar perfil:', error));
-
-        // Atualiza a seção de mensagens/notificações se houver algo novo
-        const messagesSection = document.getElementById('messages-section');
-        fetch('get_latest_messages.php') // Supostamente, você já tem algo similar em "post_status.php"
-        .then(response => response.text())
-        .then(messagesData => {
-            messagesSection.innerHTML = messagesData; // Atualiza a área de mensagens
-        })
-        .catch(error => console.error('Erro ao atualizar mensagens:', error));
-    })
-    .catch(error => console.error('Erro ao enviar o post:', error));
-});
-    return false; // Previne o envio do formulário padrão
-});
-
-    function deleteComment(commentId, postId) {
-    fetch('delete_comment.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-            comment_id: commentId,
-            post_id: postId
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Erro na exclusão do comentário.');
+        function hideUserDetails(userId) {
+            document.getElementById('user-details-' + userId).classList.add('hidden');
         }
-        return response.text();
-    })
-    .then(data => {
-        console.log(data);
-        document.getElementById(`comment-${commentId}`).remove();
-    })
-    .catch(error => console.error('Erro:', error));
-}
-
-
-</script>
+    </script>
 </body>
 </html>

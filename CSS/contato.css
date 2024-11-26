@@ -1,3 +1,4 @@
+/* Reset básico */
 * {
     margin: 0;
     padding: 0;
@@ -5,26 +6,39 @@
     font-family: Arial, sans-serif;
 }
 
-body {
-    background-color: #1a1a2e;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+/* Definir a navbar para ficar fixa no topo */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #6e6e6e; /* Cor de fundo */
+    z-index: 1000; /* Garantir que ela fique acima de outros elementos */
 }
 
+/* Ajuste do body para compensar a altura da navbar */
+body {
+    background-color: #1a1a2e !important;
+    padding-top: 60px; /* Isso empurra o conteúdo para baixo, evitando sobreposição da navbar */
+    position: relative; /* Usar position: relative para posicionamento sem flex */
+    min-height: 100vh; /* Garantir que o conteúdo ocupe a altura total */
+}
+
+/* Estilo específico do contêiner do formulário */
 .form-container {
     background-color: #0f0f1b;
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 320px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+    width: 360px; 
+    max-width: 90vw;
+    margin: 20px auto; /* Centralizar horizontalmente o formulário */
 }
 
 h2 {
     text-align: center;
-    color: white;
+    color: #fff;
     margin-bottom: 20px;
+    font-size: 24px;
 }
 
 form {
@@ -35,17 +49,27 @@ form {
 label {
     color: #fff;
     margin-bottom: 5px;
+    font-size: 14px;
 }
 
 input[type="text"],
+input[type="email"], 
 textarea {
     background-color: #161625;
     border: 1px solid #4e4e6a;
     border-radius: 5px;
-    padding: 10px;
+    padding: 12px;
     margin-bottom: 20px;
     color: #fff;
     font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    border-color: #6a6a9f;
+    outline: none;
 }
 
 input::placeholder,
@@ -53,17 +77,38 @@ textarea::placeholder {
     color: #b3b3b3;
 }
 
+textarea {
+    resize: vertical;
+}
+
 button {
-    background-color: transparent;
-    border: 1px solid #4e4e6a;
+    background-color: #4e4e6a;
+    border: none;
     color: white;
-    padding: 10px;
+    padding: 12px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-    background-color: #4e4e6a;
+    background-color: #6a6a9f;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .form-container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
 }

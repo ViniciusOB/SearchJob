@@ -3,17 +3,34 @@ session_start();
 include 'conexao.php';
 include 'views/header.php';
 
-if (!isset($_SESSION['user_id']) || !isset($_POST['post_id'])) {
+// Verifica se há um usuário ou funcionário logado
+if ((!isset($_SESSION['user_id']) && !isset($_SESSION['id_funcionario'])) || !isset($_POST['post_id'])) {
     header('Location: login.php');
     exit();
 }
 
 $post_id = $_POST['post_id'];
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['user_id'] ?? null;
+$funcionario_id = $_SESSION['id_funcionario'] ?? null;
 
-// Verifique se o post pertence ao usuário logado
-$stmt = $pdo->prepare('SELECT * FROM posts WHERE id = :post_id AND (user_id = :user_id OR ID_empresas IN (SELECT ID_empresas FROM empresas WHERE user_id = :user_id))');
-$stmt->execute(['post_id' => $post_id, 'user_id' => $user_id]);
+// Verifica se o post pertence ao usuário logado ou ao funcionário logado
+$stmt = $pdo->prepare('
+    SELECT * 
+    FROM posts 
+    WHERE id = :post_id 
+    AND (
+        (user_id = :user_id) 
+        OR 
+        (funcionario_id = :funcionario_id) 
+        OR 
+        (ID_empresas IN (SELECT ID_empresas FROM empresas WHERE user_id = :user_id OR funcionario_id = :funcionario_id))
+    )
+');
+$stmt->execute([
+    'post_id' => $post_id, 
+    'user_id' => $user_id, 
+    'funcionario_id' => $funcionario_id
+]);
 $post = $stmt->fetch();
 
 if (!$post) {

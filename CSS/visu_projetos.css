@@ -1,0 +1,200 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f3f4f6;
+    margin: 0;
+    padding: 0;
+    color: #4b5563;
+    display: flex; /* Alinha o conteúdo com o header */
+}
+
+.content {
+    padding: 40px;
+    background-color: #f9fafb;
+    min-height: 100vh;
+    width: 100%;
+    margin-left: 250px; /* Espaço para o menu lateral */
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 30px;
+}
+
+/* Estilo das abas */
+.tabs {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 30px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.tab {
+    padding: 12px 25px;
+    background-color: #f3f4f6;
+    border-radius: 9999px;
+    color: #1f2937;
+    font-weight: 500;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-right: 10px;
+}
+
+.tab.active {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.tab:hover {
+    background-color: #2563eb;
+    color: white;
+}
+
+/* Conteúdo de cada aba */
+.content-section {
+    display: none;
+}
+
+.content-section.active {
+    display: block;
+}
+
+/* Formulário de Filtro e Pesquisa */
+.filter-form {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.filter-form input[type="text"],
+.filter-form input[type="date"] {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 1rem;
+}
+
+.filter-form button {
+    padding: 8px 16px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-form button:hover {
+    background-color: #2563eb;
+}
+
+/* Grid de projetos */
+.projects-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Define 4 colunas para projetos */
+    gap: 20px; /* Espaçamento entre os projetos */
+    margin-top: 30px;
+    align-items: start; /* Alinha os cartões no topo */
+}
+
+/* Cartões de projetos */
+.project-card {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 240px; /* Altura mínima reduzida */
+    max-width: 200px; /* Largura máxima dos cartões ajustada para menor tamanho */
+}
+
+.project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.project-image {
+    width: 100%;
+    height: 120px; /* Altura ajustada para o tamanho reduzido */
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image {
+    transform: scale(1.05);
+}
+
+.project-name {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+.project-date {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-bottom: 10px;
+}
+
+.project-card .status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #10b981;
+    color: white;
+    font-size: 0.75rem;
+    padding: 5px 10px;
+    border-radius: 9999px;
+    font-weight: 600;
+}
+
+/* Responsividade */
+/* Em telas menores, reduz o número de colunas */
+@media (max-width: 1024px) {
+    .projects-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .projects-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .projects-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .tabs {
+        flex-direction: column;
+    }
+
+    .tab {
+        margin-bottom: 10px;
+    }
+
+    /* Ajustando o layout do header em telas menores */
+    .content {
+        margin-left: 0; /* Remove a margem do header em telas pequenas */
+    }
+}

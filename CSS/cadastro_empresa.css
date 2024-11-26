@@ -1,0 +1,288 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', sans-serif;
+}
+
+body {
+    background: rgb(26, 24, 51);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    z-index: 1000;
+    display: block;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: start;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand a {
+    text-decoration: none;
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    padding: 0 10px;
+    background-repeat: no-repeat;
+    background-size: 30px; 
+    background-position: left center;
+    padding-left: 40px; 
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: transparent;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffcc00;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: none;
+    list-style: none;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.dropdown.show .dropdown-menu {
+    display: block;
+}
+
+.dropdown-item {
+    text-decoration: none;
+    color: white;
+    padding: 5px 10px;
+    display: block;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffcc00;
+}
+
+.container {
+    width: 100%; /* O container ocupa toda a largura da tela */
+    display: flex;
+    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    align-items: center; /* Centraliza o conteúdo verticalmente */
+    min-height: 100vh; /* Garante que o card fique centralizado verticalmente */
+}
+
+.form-group {
+    margin-bottom: 15px;
+    width: 100%; /* Ajusta a largura do formulário */
+    color: #ffcc00;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #D1D1D4;
+    background: none;
+    color: #ffcc00 !important;
+
+    font-weight: bold;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-bottom-color: #6A679E;
+    outline: none;
+}
+
+.btn {
+    background-color: #fff;
+    color: #4C489D;
+    border: none;
+    padding: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #D4D3E8;
+}
+
+.mt-3 a, .mt-4 a {
+    color: #ffcc00;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.mt-3 a:hover, .mt-4 a:hover {
+    text-decoration: underline;
+}
+
+.btn img {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px;
+    vertical-align: middle;
+}
+
+.btn-danger, .btn-primary {
+    padding: 12px 20px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    width: 40vw; /* Defina a largura do card */
+    max-width: 500px; /* Limita a largura do card */
+    margin: 0 auto; /* Garante que o card fique centralizado horizontalmente */
+    text-align: center; /* Centraliza o conteúdo do card */
+    margin-left: -110px;
+    margin-right: -20;
+    padding-top: 100%;
+    color: #ffcc00;
+    margin-top: 90vh;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card h3 {
+    color: #ffcc00;
+}
+
+.card p {
+    color: #ffcc00;
+}
+
+.btn-danger:hover, .btn-primary:hover {
+    opacity: 0.9;
+}
+
+.btn-primary-login {
+    padding: 12px 20px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    width: 100%;
+}
+
+.btn-primary-login:hover {
+    opacity: 0.9;
+}
+
+@media (min-width: 1500px) {
+    .container {
+        margin-left: 24%;
+        margin-right: 35%;
+    }
+}
+
+/* Ajustes para telas menores */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .brand {
+        font-size: 1.5em;
+    }
+    
+    .nav-menu {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+        align-items: center;
+    }
+    
+    .nav-menu li {
+        margin: 10px 0;
+    }
+
+    .container {
+        flex-direction: column;
+        padding-bottom: 0; /* Remove o padding negativo */
+    }
+
+    .card {
+        width: 80vw; /* Ajusta a largura do card para telas menores */
+        height: auto;
+        color: #ffcc00;
+        
+    }
+
+    .form-group {
+        margin-bottom: 10px; /* Diminui a margem entre os campos */
+        width: 60%; /* Aumenta a largura do formulário, se necessário */
+    }
+    
+    .form-control {
+        padding: 8px; /* Diminui o padding dos campos */
+    }
+    
+    .btn {
+        padding: 10px; /* Diminui o padding dos botões */
+        font-size: 14px; /* Ajusta o tamanho da fonte */
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        width: 90vw; /* Ocupa quase a tela inteira em dispositivos muito pequenos */
+        color: #ffcc00;
+    }
+}

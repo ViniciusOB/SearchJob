@@ -3,30 +3,39 @@ session_start();
 include 'conexao.php';
 include 'views/header.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
+// Verificar se o usuário está logado
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
 
 $user_id = $_SESSION['user_id'];
+
+// Obter o destinatário da URL
 $destinatario_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
 
-// Caso o destinatário não seja informado, exiba a lista de conversas
+// Exibir lista de conversas se nenhum destinatário for especificado
 if (!$destinatario_id) {
-    // Obter uma lista de conversas recentes do usuário logado
+    // Consulta para obter as conversas
     $stmt = $pdo->prepare('
-        SELECT u.id_usuario, u.nome_usuario, u.profile_pic, MAX(m.data_envio) as ultima_mensagem
+        SELECT u.id_usuario AS id, u.nome_usuario AS nome, u.profile_pic, MAX(m.data_envio) as ultima_mensagem
         FROM mensagens m
-        JOIN usuarios u ON (u.id_usuario = m.remetente_id OR u.id_usuario = m.destinatario_id)
+        LEFT JOIN usuarios u ON (u.id_usuario = m.remetente_id OR u.id_usuario = m.destinatario_id)
         WHERE (m.remetente_id = :user_id OR m.destinatario_id = :user_id)
-        AND u.id_usuario != :user_id
-        GROUP BY u.id_usuario
+        AND u.id_usuario <> :user_id -- Evitar conversas com o próprio usuário
+        GROUP BY u.id_usuario, u.nome_usuario, u.profile_pic
         ORDER BY ultima_mensagem DESC
     ');
     $stmt->execute(['user_id' => $user_id]);
     $conversas = $stmt->fetchAll();
+
+    // Exibir a lista de conversas
     ?>
-    
     <!DOCTYPE html>
     <html lang="pt-br">
     <head>
@@ -37,16 +46,15 @@ if (!$destinatario_id) {
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     </head>
     <body>
-
     <div class="container mt-4">
         <h2>Suas Conversas</h2>
         <ul class="list-group">
             <?php if ($conversas): ?>
                 <?php foreach ($conversas as $conversa): ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="mensagens.php?user_id=<?php echo $conversa['id_usuario']; ?>">
+                        <a href="mensagens.php?user_id=<?php echo $conversa['id']; ?>">
                             <img src="<?php echo htmlspecialchars($conversa['profile_pic'] ?: 'default-profile.png'); ?>" alt="Foto de perfil" class="img-thumbnail" style="width: 50px; height: 50px;">
-                            <?php echo htmlspecialchars($conversa['nome_usuario']); ?>
+                            <?php echo htmlspecialchars($conversa['nome']); ?>
                         </a>
                         <span class="badge badge-primary badge-pill"><?php echo date('d/m/Y H:i', strtotime($conversa['ultima_mensagem'])); ?></span>
                     </li>
@@ -58,47 +66,34 @@ if (!$destinatario_id) {
     </div>
     </body>
     </html>
-    
     <?php
     exit();
 }
 
-// Verificar se o usuário está tentando enviar uma nova mensagem
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['conteudo'])) {
-    $conteudo = trim($_POST['conteudo']);
-    if (!empty($conteudo)) {
-        $stmt = $pdo->prepare('INSERT INTO mensagens (remetente_id, destinatario_id, conteudo) VALUES (:remetente_id, :destinatario_id, :conteudo)');
+// Verificar se a mensagem inicial está presente e o destinatário é válido
+if ($destinatario_id && isset($_GET['message'])) {
+    $mensagemInicial = trim($_GET['message']);
+    if (!empty($mensagemInicial)) {
+        // Inserir a mensagem inicial no banco de dados
+        $stmt = $pdo->prepare('INSERT INTO mensagens (remetente_id, destinatario_id, conteudo, data_envio) VALUES (:remetente_id, :destinatario_id, :conteudo, NOW())');
         $stmt->execute([
             'remetente_id' => $user_id,
             'destinatario_id' => $destinatario_id,
-            'conteudo' => $conteudo
+            'conteudo' => $mensagemInicial
         ]);
-
-        // Após enviar a mensagem, insere a notificação
-        $sql_notificacao = "INSERT INTO notificacoes (tipo, usuario_id, remetente_id, mensagem_id, visto) 
-                            VALUES ('mensagem', :usuario_id, :remetente_id, :mensagem_id, 0)";
-        $stmt_notificacao = $pdo->prepare($sql_notificacao);
-        $stmt_notificacao->bindParam(':usuario_id', $destinatario_id); // Usuário que vai receber a notificação
-        $stmt_notificacao->bindParam(':remetente_id', $user_id); // Quem enviou a mensagem
-        $stmt_notificacao->bindParam(':mensagem_id', $pdo->lastInsertId()); // ID da mensagem enviada
-        $stmt_notificacao->execute();
     }
-    header('Location: mensagens.php?user_id=' . $destinatario_id);
+
+    // Redirecionar sem a mensagem na URL para evitar reenvios
+    header("Location: mensagens.php?user_id=$destinatario_id");
     exit();
 }
 
-// Obter as mensagens trocadas entre o usuário logado e o destinatário
-$stmt = $pdo->prepare('
-    SELECT * FROM mensagens 
-    WHERE (remetente_id = :user_id AND destinatario_id = :destinatario_id) 
-       OR (remetente_id = :destinatario_id AND destinatario_id = :user_id)
-    ORDER BY data_envio ASC
-');
-$stmt->execute([
-    'user_id' => $user_id,
-    'destinatario_id' => $destinatario_id
-]);
-$mensagens = $stmt->fetchAll();
+
+// Impedir criação de conversa consigo mesmo
+if ($destinatario_id == $user_id) {
+    echo "<p>Você não pode iniciar uma conversa consigo mesmo.</p>";
+    exit();
+}
 
 // Obter o nome do destinatário
 $stmt = $pdo->prepare('SELECT nome_usuario FROM usuarios WHERE id_usuario = :id_usuario');
@@ -137,6 +132,10 @@ if (!$destinatario) {
             background-color: #f8d7da;
             text-align: left;
         }
+        .chat-box {
+            max-height: 400px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
@@ -144,22 +143,13 @@ if (!$destinatario) {
 <div class="container chat-container mt-4">
     <h2>Chat com <?php echo htmlspecialchars($destinatario['nome_usuario']); ?></h2>
 
-    <div class="chat-box mb-4">
-        <?php if ($mensagens): ?>
-            <?php foreach ($mensagens as $mensagem): ?>
-                <div class="message <?php echo $mensagem['remetente_id'] == $user_id ? 'sent' : 'received'; ?>">
-                    <p><?php echo htmlspecialchars($mensagem['conteudo']); ?></p>
-                    <small><?php echo date('d/m/Y H:i', strtotime($mensagem['data_envio'])); ?></small>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>Sem mensagens anteriores.</p>
-        <?php endif; ?>
+    <div class="chat-box mb-4" id="chat-box">
+        <!-- As mensagens serão carregadas aqui pelo JavaScript -->
     </div>
 
-    <form action="mensagens.php?user_id=<?php echo $destinatario_id; ?>" method="POST">
+    <form id="message-form">
         <div class="input-group">
-            <input type="text" name="conteudo" class="form-control" placeholder="Digite sua mensagem..." required>
+            <input type="text" name="conteudo" id="conteudo" class="form-control" placeholder="Digite sua mensagem..." required>
             <div class="input-group-append">
                 <button class="btn btn-primary" type="submit">Enviar</button>
             </div>
@@ -167,5 +157,57 @@ if (!$destinatario) {
     </form>
 </div>
 
+<script>
+// Função para buscar mensagens
+function fetchMessages() {
+    const userId = <?php echo $destinatario_id; ?>;
+
+    fetch(`fetch_messages.php?user_id=${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = ''; // Limpa as mensagens anteriores
+
+            // Adiciona cada mensagem ao chat
+            data.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message ' + (msg.remetente_id == <?php echo $user_id; ?> ? 'sent' : 'received');
+                messageDiv.innerHTML = `
+                    <p>${msg.conteudo}</p>
+                    <small>${new Date(msg.data_envio).toLocaleString()}</small>
+                `;
+                chatBox.appendChild(messageDiv);
+            });
+
+            // Rolagem automática para a última mensagem
+            chatBox.scrollTop = chatBox.scrollHeight;
+        })
+        .catch(error => console.error('Erro ao buscar mensagens:', error));
+}
+
+// Função para enviar uma nova mensagem
+document.getElementById('message-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const conteudo = document.getElementById('conteudo').value.trim();
+    if (conteudo) {
+        const formData = new FormData();
+        formData.append('conteudo', conteudo);
+
+        fetch(`send_message.php?user_id=<?php echo $destinatario_id; ?>`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(() => {
+            document.getElementById('conteudo').value = ''; // Limpa o campo de texto
+            fetchMessages(); // Atualiza as mensagens
+        })
+        .catch(error => console.error('Erro ao enviar mensagem:', error));
+    }
+});
+
+// Recarregar mensagens a cada 2 segundos
+setInterval(fetchMessages, 2000);
+fetchMessages(); // Carrega as mensagens ao abrir a página
+</script>
 </body>
 </html>

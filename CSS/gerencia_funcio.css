@@ -1,0 +1,202 @@
+/* Estilo Global */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9; /* Fundo neutro suave */
+    color: #2c3e50; /* Cor de texto escura profissional */
+}
+
+.content {
+    margin-left: 250px; /* Espaço lateral grande para telas grandes */
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Sombra mais suave */
+    transition: margin-left 0.3s ease; /* Transição suave ao ajustar margens */
+}
+
+/* Títulos */
+h1, h2 {
+    color: #1a5276; /* Azul escuro mais sóbrio para os títulos */
+    font-weight: bold;
+}
+
+/* Botões */
+.btn-primary, .btn-info {
+    background-color: #1a5276;
+    border-color: #1a5276;
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover, .btn-info:hover {
+    background-color: #154360;
+    border-color: #154360;
+}
+
+.btn-danger {
+    background-color: #c0392b;
+    border-color: #c0392b;
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+}
+
+.btn-danger:hover {
+    background-color: #a93226;
+    border-color: #a93226;
+}
+
+/* Tabela */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+}
+
+.table th {
+    background-color: #1a5276;
+    color: #ffffff;
+    padding: 12px;
+    text-align: left;
+    border-top: none;
+}
+
+.table th, .table td {
+    padding: 12px;
+    border-bottom: 1px solid #dee2e6; /* Linha de separação suave */
+}
+
+.table tr:hover {
+    background-color: #f8f9fa; /* Fundo leve no hover */
+}
+
+/* Estilo das Imagens de Perfil */
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid #1a5276;
+}
+
+/* Formulário de Busca */
+.form-inline {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap; /* Ajustar em múltiplas linhas em telas pequenas */
+}
+
+.form-inline input[type="text"] {
+    width: auto;
+    padding: 0.6rem;
+    margin-right: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease;
+    flex: 1; /* Flexibilidade para ajustar o input conforme o espaço */
+}
+
+.form-inline input[type="text"]:focus {
+    border-color: #1a5276;
+    outline: none;
+}
+
+.form-inline .btn-info {
+    background-color: #1a5276;
+    color: white;
+    border-color: #1a5276;
+    transition: background-color 0.3s ease;
+    margin-top: 0.5rem; /* Adicionar margem para dispositivos móveis */
+}
+
+.form-inline .btn-info:hover {
+    background-color: #154360;
+}
+
+/* Alertas */
+.alert {
+    border-radius: 5px;
+    padding: 0.75rem 1.25rem;
+    color: #1e8449; /* Verde elegante */
+    background-color: #d5f5e3;
+    border-color: #abebc6;
+    margin-top: 1rem;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+    .content {
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    .table thead {
+        display: none; /* Ocultar o cabeçalho em telas menores */
+    }
+
+    .table, .table tbody, .table tr, .table td {
+        display: block;
+        width: 100%;
+    }
+
+    .table tr {
+        margin-bottom: 15px; /* Espaçamento entre linhas */
+        border: 1px solid #dee2e6; /* Linha de separação */
+        border-radius: 5px;
+    }
+
+    .table td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    .table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 15px;
+        font-weight: bold;
+        text-align: left;
+        color: #1a5276;
+    }
+
+    .profile-pic {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .content {
+        padding: 0.5rem;
+    }
+
+    h1, h2 {
+        font-size: 1.5rem;
+    }
+
+    .btn-primary, .btn-danger {
+        width: 100%;
+        margin-bottom: 0.5rem; /* Botões se tornam blocos inteiros em telas pequenas */
+    }
+}
+
+@media (max-width: 480px) {
+    h1, h2 {
+        font-size: 1.2rem;
+    }
+
+    .form-inline {
+        flex-direction: column; /* Empilhar os elementos do formulário de busca */
+    }
+
+    .form-inline input[type="text"], .form-inline .btn-info {
+        width: 100%; /* O input e botão ocupam toda a largura da tela */
+        margin-bottom: 0.5rem;
+    }
+}

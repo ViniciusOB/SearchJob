@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+}
+.container {
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+}
+.notificacao {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+.notificacao.novo {
+    background-color: #eaf4fc;
+}
+.notificacao p {
+    margin: 0;
+    color: #555;
+}
+.notificacao small {
+    display: block;
+    margin-top: 8px;
+    color: #999;
+}
+p.nenhuma-notificacao {
+    text-align: center;
+    font-size: 18px;
+    color: #777;
+}

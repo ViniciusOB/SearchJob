@@ -1,0 +1,41 @@
+/* Estilo do rodapé */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+    width: 100%;
+    bottom: 0;
+    font-size: 14px;
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 0 15px;
+}
+
+footer a:hover {
+    color: #ff9800;
+    text-decoration: underline;
+}
+
+footer p {
+    margin: 10px 0;
+}
+
+.footer-icons {
+    margin-top: 10px;
+}
+
+.footer-icons img {
+    width: 24px;
+    height: 24px;
+    margin: 0 10px;
+}
+
+.footer-icons img:hover {
+    opacity: 0.7;
+}

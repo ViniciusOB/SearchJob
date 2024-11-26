@@ -1,0 +1,58 @@
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    form {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.5em;
+        padding-bottom: 60px;
+    }
+
+    .profile-pic-container {
+        width: 120px;
+        height: 120px;
+        margin: -60px auto 10px;
+    }
+
+    .profile-info {
+        padding-top: 60px;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+        padding: 8px;
+        font-size: 0.85em;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.2em;
+        padding-bottom: 40px;
+    }
+
+    .profile-pic-container {
+        width: 100px;
+        height: 100px;
+        margin: -50px auto 10px;
+    }
+
+    .profile-info {
+        padding-top: 50px;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+        padding: 7px;
+        font-size: 0.8em;
+    }
+
+    .btn-primary {
+        padding: 8px;
+    }
+}

@@ -20,7 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: nova_senha.php?email=$email");
         exit();
     } else {
-        echo "Resposta de segurança incorreta.";
+        // Redireciona de volta com o parâmetro de erro na URL
+        header("Location: recuperar_senha.php?erro=1");
+        exit();
     }
 }
 ?>
