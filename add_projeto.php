@@ -9,9 +9,9 @@ if (!isset($_SESSION['id_funcionario'])) {
 
 // Conexão com o banco de dados MySQL
 $servername = "localhost"; 
-$username = "u451416913_2024grupo10"; 
-$password = "Grupo10@123"; 
-$dbname = "u451416913_2024grupo10"; 
+$username = "root"; 
+$password = ""; 
+$dbname = ""; 
 
 // Criando a conexão
 $conn = new mysqli($servername, $username, $password, $dbname);
